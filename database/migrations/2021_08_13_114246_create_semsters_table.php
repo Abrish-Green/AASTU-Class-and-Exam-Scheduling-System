@@ -15,6 +15,7 @@ class CreateSemstersTable extends Migration
     {
         Schema::create('semsters', function (Blueprint $table) {
             $table->id();
+            $table->integer('semester_name');
             $table->timestamps();
         });
     }
