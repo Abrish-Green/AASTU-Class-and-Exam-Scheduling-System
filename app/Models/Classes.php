@@ -11,7 +11,7 @@ class Classes extends Model
 
     protected $fillable = [
         'class_name',
-        'entry_year',
+        'year',
         'semester',
         'department_id',
     ];

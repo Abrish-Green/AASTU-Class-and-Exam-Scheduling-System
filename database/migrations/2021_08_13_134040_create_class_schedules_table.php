@@ -13,17 +13,17 @@ class CreateClassSchedulesTable extends Migration
      */
     public function up()
     {
+
         Schema::create('class_schedules', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('class_id')->unsigned()->index();
             $table->bigInteger('year_id')->unsigned()->index();
-            $table->bigInteger('semester_id')->unsigned()->index();
+            $table->integer('semester_id');
             $table->bigInteger('day_id')->unsigned()->index();
             $table->timestamps();
 
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
             $table->foreign('year_id')->references('id')->on('years')->onDelete('cascade');
-            $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
             $table->foreign('day_id')->references('id')->on('days')->onDelete('cascade');
 
         });

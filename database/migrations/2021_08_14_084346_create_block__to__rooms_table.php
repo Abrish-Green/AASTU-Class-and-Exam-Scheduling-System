@@ -13,14 +13,15 @@ class CreateBlockToRoomsTable extends Migration
      */
     public function up()
     {
+
         Schema::create('block__to__rooms', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('room_id')->unsigned()->index();
             $table->bigInteger('block_id')->unsigned()->index();
             $table->timestamps();
 
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('block_id')->references('id')->on('block')->onDelete('cascade');
+           $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('block_id')->references('id')->on('blocks')->onDelete('cascade');
         });
     }
 

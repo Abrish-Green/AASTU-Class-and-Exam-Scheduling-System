@@ -12,8 +12,6 @@ use PhpParser\Node\Expr\Cast\Array_;
 class PlacementController extends Controller
 {
     //
-
-
     public function addBlock(Request $request){ //college
         $block = Block::create([
             'name' => $request->name,
@@ -63,7 +61,7 @@ class PlacementController extends Controller
     public function addClass(Request $request){
         $classes = Classes::create([
             'class_name' => $request->name,
-            'entry_year' => $request->entry_year,
+            'year' => $request->year,
             'semester' => $request->semester,
             'department_id' =>$request->department_id,
         ],200);

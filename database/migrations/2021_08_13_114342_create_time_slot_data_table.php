@@ -13,6 +13,7 @@ class CreateTimeSlotDataTable extends Migration
      */
     public function up()
     {
+
         Schema::create('time_slot_data', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('timeslot_id')->unsigned()->index();
