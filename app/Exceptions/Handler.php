@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use BadMethodCallException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -72,6 +73,16 @@ class Handler extends ExceptionHandler
                 ],404);
             }
         });
+        $this->renderable(function (QueryException $e,$request) {
+            //
+            if($request->is('api/*')){
+                return response()->json([
+                    'Message' => 'Problem with SQL Query',
+                    'Error_detail'=>[$e->getMessage()]
+                ],404);
+            }
+        });
+
 
 
     }

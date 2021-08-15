@@ -9,7 +9,7 @@ class Block extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'block_name',
     ];
 
     public function classes(){

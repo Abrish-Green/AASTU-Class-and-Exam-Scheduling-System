@@ -11,7 +11,7 @@ class Room extends Model
 
 
     protected $fillable = [
-        'room_name',
+        'rooms_name',
     ];
 
     public function block(){

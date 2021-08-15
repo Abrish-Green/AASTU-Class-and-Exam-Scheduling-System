@@ -12,9 +12,9 @@ use PhpParser\Node\Expr\Cast\Array_;
 class PlacementController extends Controller
 {
     //
-    public function addBlock(Request $request){ //college
+    public function addBlock(Request $request){ //department
         $block = Block::create([
-            'name' => $request->name,
+            'block_name' => $request->name,
         ]);
 
         return response([
@@ -24,11 +24,10 @@ class PlacementController extends Controller
         ],200);
     }
 
-    public function addRoom(Request $request){  //college
+    public function addRoom(Request $request){  //department
 
         $room = Room::create([
-            'room_name' => $request->room_name,
-            'block_id' => $request->block_id,
+            'rooms_name' => $request->room_name,
         ]);
         return response([
             'CREATED_DATA' =>$room,
@@ -37,7 +36,7 @@ class PlacementController extends Controller
         ],200);
     }
 
-    public function GenerateRoomsForBlock(Request $request){  //college
+    public function GenerateRoomsForBlock(Request $request){  //
 
         $floors = $request->floor;
         $rooms_per_floor = $request->rooms_per_floor;
@@ -45,10 +44,10 @@ class PlacementController extends Controller
         //$block = (Block::findOrFail($request->block_id)) ? Block::findOrFail($request->block_id)->name : '!Block';
         $total_rooms = $floors*$rooms_per_floor;
 
-        for($room=0;$room<$total_rooms;$room++){
+        for($room=1;$room<=$total_rooms;$room++){
 
                 $tempRoom = Room::create([
-                    'room_name' => $room ,
+                    'rooms_name' => $room ,
                 ]);
                 array_push( $rooms, $tempRoom);
         }
@@ -58,7 +57,7 @@ class PlacementController extends Controller
             'Status' => 'OK'
         ],200);
     }
-    public function addClass(Request $request){
+    public function addClass(Request $request){ //department
         $classes = Classes::create([
             'class_name' => $request->name,
             'year' => $request->year,

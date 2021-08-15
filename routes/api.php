@@ -18,6 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('registrar')->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Admin\AdminController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Admin\AdminController::class,'login']);
+
+
+
+
+
+
+
 });
 
 //Protected
@@ -27,10 +34,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function(){
     Route::get('/user',[\App\Http\Controllers\API\Admin\AdminController::class,'admin']);
     Route::post('/logout',[\App\Http\Controllers\API\Admin\AdminController::class,'logout']);
 });
-
-
-
-
 
 
 //College Routes
@@ -53,13 +56,6 @@ Route::middleware('auth:sanctum')->prefix('college')->group(function(){
     Route::post('/logout',[\App\Http\Controllers\API\Privates\college\CollegeUserController::class,'logout']);
 });
 
-
-
-
-
-
-
-
 //Department Routes
 //------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -69,6 +65,26 @@ Route::middleware('auth:sanctum')->prefix('college')->group(function(){
 Route::prefix('department')->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'login']);
+
+    Route::post('/block/add',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'addBlock']);
+    Route::post('/room/add',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'addRoom']);
+    Route::post('/room/generate',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'GenerateRoomsForBlock']);
+    Route::post('/class/add',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'addClass']);
+
+    Route::post('/year/add',[\App\Http\Controllers\API\Privates\time\TimeController::class,'addYear']);
+    Route::post('/semester/add',[\App\Http\Controllers\API\Privates\time\TimeController::class,'addSemester']);
+    Route::post('/day/add',[\App\Http\Controllers\API\Privates\time\TimeController::class,'addDay']);
+    Route::post('/timeslot/add',[\App\Http\Controllers\API\Privates\time\TimeController::class,'addTimeslot']);
+    Route::post('/timeslot_data/add',[\App\Http\Controllers\API\Privates\time\TimeController::class,'addTimeslotData']);
+
+
+
+
+
+
+
+
+
 });
 
 //Protected
@@ -78,6 +94,20 @@ Route::middleware('auth:sanctum')->prefix('department')->group(function(){
     Route::get('/current',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'currentDepartmentUser']);
     Route::apiResource('/user',\App\Http\Controllers\Api\Privates\department\DepartmentAccountController::class);
     Route::post('/logout',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'logout']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 

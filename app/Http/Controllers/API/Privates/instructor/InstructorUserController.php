@@ -156,4 +156,39 @@ class InstructorUserController extends Controller
          ],200);
 
     }
+    public function GenerateDefaultPassword(Request $request,$id){
+
+        $Validated = $request->validate([
+            'email' => 'email\required',
+        ]);
+
+        $instructor = Instructor::findOrFail($id);
+
+        if(!$instructor){
+            return response([
+                'Message' => 'Instructor Not Updated',
+                'Status' => 'OK'
+            ],400);
+        }
+
+        $DEFAULT_PASSWORD = Hash::make('default');
+        $isUpdated = $instructor->update([
+            'password' => $DEFAULT_PASSWORD
+        ]);
+
+        if(!$isUpdated){
+            return response([
+                'Message' => 'Not Updated',
+                'Status' => 'OK'
+            ],400);
+        }
+
+        return response([
+            'Updated_DATA' => $instructor,
+            'Message' => 'Instructor is Updated Successfully',
+            'Status' => 'OK'
+        ],200);
+
+
+    }
 }
