@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\privates\exam;
 
 use App\Http\Controllers\Controller;
+use App\Models\ExamCourses;
 use Illuminate\Http\Request;
 
 class ExamCourseController extends Controller
@@ -15,6 +16,7 @@ class ExamCourseController extends Controller
     public function index()
     {
         //
+        $ExamCourse = ExamCourses::findOrfail();
     }
 
     /**

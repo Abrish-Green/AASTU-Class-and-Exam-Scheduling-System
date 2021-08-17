@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\privates\placement;
 use App\Http\Controllers\Controller;
 use App\Models\Block;
 use App\Models\Classes;
+use App\Models\CustomRoom;
 use App\Models\LabRoom;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -73,15 +74,25 @@ class PlacementController extends Controller
         ],200);
     }
     public function addLab(Request $request){ //department
-        $classes = LabRoom::create([
-            'class_name' => $request->name,
-            'year' => $request->year,
-            'semester' => $request->semester,
-            'department_id' =>$request->department_id,
+        $lab = LabRoom::create([
+            'lab_name' => $request->name,
+            'department_id' => $request->department_id
         ],200);
 
         return response([
-            'CREATED_DATA' =>$classes,
+            'CREATED_DATA' =>$lab,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
+    public function addCustomRoom(Request $request){ //department
+        $customRoom = CustomRoom::create([
+            'custom_name' => $request->name,
+            'department_id' => $request->department_id
+        ],200);
+
+        return response([
+            'CREATED_DATA' =>$customRoom,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);

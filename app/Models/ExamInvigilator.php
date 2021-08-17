@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExamInvigilator extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'invigilator_name',
         'active'
