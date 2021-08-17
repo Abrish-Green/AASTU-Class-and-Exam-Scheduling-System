@@ -15,6 +15,7 @@ class CourseToInstructorController extends Controller
     public function index()
     {
         //
+
     }
 
     /**

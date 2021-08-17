@@ -10,8 +10,7 @@ class InstructorToClass extends Model
     use HasFactory;
     protected $fillable = [
         'class_id',
-        'instructor_id',
-        'course_id'
+        'instructor_to_course_id'
     ];
 
     public function instructor(){

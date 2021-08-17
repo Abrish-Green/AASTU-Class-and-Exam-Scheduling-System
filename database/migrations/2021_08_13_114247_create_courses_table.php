@@ -18,8 +18,9 @@ class CreateCoursesTable extends Migration
             $table->string('course_title');
             $table->integer('year');
             $table->string('course_code');
-            $table->integer('course_credit_hour');
-            $table->boolean('course_has_lab');
+            $table->float('course_credit_hour');
+            $table->boolean('course_has_lab')->default(1);
+            $table->boolean('course_has_lecture')->default(1);
             $table->enum('course_type',['Common_course','Major_course','Supporting_course']);
             $table->bigInteger('course_department_id')->unsigned()->index();
             $table->timestamps();

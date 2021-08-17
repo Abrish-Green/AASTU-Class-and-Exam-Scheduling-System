@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\privates\placement;
 use App\Http\Controllers\Controller;
 use App\Models\Block;
 use App\Models\Classes;
+use App\Models\LabRoom;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Array_;
@@ -59,6 +60,20 @@ class PlacementController extends Controller
     }
     public function addClass(Request $request){ //department
         $classes = Classes::create([
+            'class_name' => $request->name,
+            'year' => $request->year,
+            'semester' => $request->semester,
+            'department_id' =>$request->department_id,
+        ],200);
+
+        return response([
+            'CREATED_DATA' =>$classes,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
+    public function addLab(Request $request){ //department
+        $classes = LabRoom::create([
             'class_name' => $request->name,
             'year' => $request->year,
             'semester' => $request->semester,
