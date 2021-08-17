@@ -16,7 +16,14 @@ class ExamCourseController extends Controller
     public function index()
     {
         //
-        $ExamCourse = ExamCourses::findOrfail();
+        $ExamCourse = ExamCourses::all();
+
+        return response([
+            'CREATED_DATA' =>$ExamCourse,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
     }
 
     /**
@@ -28,6 +35,27 @@ class ExamCourseController extends Controller
     public function store(Request $request)
     {
         //
+        $Validated = $request->validate([
+            'course_id' => 'required',
+            'department_id'=> 'required',
+            'course_year'=> 'required',
+            'year'=> 'required',
+            'semester'=> 'required',
+        ]);
+
+        $Examcourse = ExamCourses::create([
+            'course_id' => $Validated['course_id'],
+            'department_id' =>$Validated['department_id'],
+            'course_year' =>$Validated['course_year'],
+            'year' =>$Validated['year'],
+            'semester' =>$Validated['semester'],
+        ]);
+
+        return response([
+            'CREATED_DATA' =>$Examcourse,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
     }
 
     /**
@@ -39,6 +67,19 @@ class ExamCourseController extends Controller
     public function show($id)
     {
         //
+        $ExamCourse = ExamCourses::findOrFail($id);
+
+        if(!$ExamCourse){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        return response([
+            'CREATED_DATA' =>$Examcourse,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
     }
 
     /**
@@ -51,6 +92,24 @@ class ExamCourseController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ExamCourse = ExamCourses::findOrFail($id);
+
+        if(!$ExamCourse){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+
+        $ExamCourse->update($request->all());
+        $Updated = ExamCourses::findOrFail($id);
+
+        return response([
+            'CREATED_DATA' => $Updated,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
     }
 
     /**
@@ -62,5 +121,18 @@ class ExamCourseController extends Controller
     public function destroy($id)
     {
         //
+        $ExamCourse = ExamCourses::findOrFail($id);
+        if(!$ExamCourse){
+            return response([
+                'Message' => 'Exam Course Not Found',
+                'Status' => 'OK'
+            ],400);
+        }
+        ExamCourses::findOrFail($id)->delete();
+        return response([
+            'Message'=>'Exam Course Successfully Deleted',
+            'Status' => 'OK'
+        ],200);
+
     }
 }

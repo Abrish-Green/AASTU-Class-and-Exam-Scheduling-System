@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\privates\course;
 
 use App\Http\Controllers\Controller;
+use App\Models\InstructorToCourse;
 use Illuminate\Http\Request;
 
 class CourseToInstructorController extends Controller
@@ -15,7 +16,12 @@ class CourseToInstructorController extends Controller
     public function index()
     {
         //
-
+        $course_to_instructor = InstructorToCourse::all();
+        return response([
+            'CREATED_DATA' =>$course_to_instructor,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
     }
 
     /**
@@ -27,6 +33,21 @@ class CourseToInstructorController extends Controller
     public function store(Request $request)
     {
         //
+        $Validated = $request->validate([
+            'instructor_id' => $request->instructor_id,
+            'course_id' => $request->course_id
+        ]);
+
+        $course_to_instructor = InstructorToCourse::create([
+            'instructor_id' => $Validated['instructor_id'],
+            'course_id' =>$Validated['course_id'],
+        ]);
+        return response([
+            'CREATED_DATA' =>$course_to_instructor,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
     }
 
     /**
@@ -38,6 +59,21 @@ class CourseToInstructorController extends Controller
     public function show($id)
     {
         //
+        $course_to_instructor = InstructorToCourse::findOrFail($id);
+
+        if(!$course_to_instructor){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],400);
+        }
+        return response([
+            'CREATED_DATA' =>$course_to_instructor,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
+
     }
 
     /**
@@ -50,6 +86,23 @@ class CourseToInstructorController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $course_to_instructor = InstructorToCourse::findOrFail($id);
+
+        if(!$course_to_instructor){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],400);
+        }
+
+        $course_to_instructor->update($request->all());
+
+        return response([
+            'CREATED_DATA' =>$course_to_instructor,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
     }
 
     /**
@@ -61,5 +114,21 @@ class CourseToInstructorController extends Controller
     public function destroy($id)
     {
         //
+        $course_to_instructor = InstructorToCourse::findOrFail($id);
+
+        if(!$course_to_instructor){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],400);
+        }
+
+        $course_to_instructor->delete();
+
+        return response([
+            'Message' => 'Deleted Successfully',
+            'Status' => 'OK'
+        ],200);
+
     }
 }

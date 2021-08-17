@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\privates\exam;
 
 use App\Http\Controllers\Controller;
+use App\Models\ExamInvigilator;
 use Illuminate\Http\Request;
 
 class InvigilatorController extends Controller
@@ -15,6 +16,12 @@ class InvigilatorController extends Controller
     public function index()
     {
         //
+        $ExamInvigilator = ExamInvigilator::all();
+        return response([
+            'CREATED_DATA' =>$ExamInvigilator,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
     }
 
     /**
@@ -26,6 +33,22 @@ class InvigilatorController extends Controller
     public function store(Request $request)
     {
         //
+        $Validated = $request->validate([
+            'invigilator_name' => $request->invigilator_name,
+            'active' => $request->active
+        ]);
+
+        $ExamInvigilator = ExamInvigilator::create([
+            'invigilator_name' => $Validated['invigilator_name'],
+            'active' =>$Validated['active'],
+        ]);
+
+        return response([
+            'CREATED_DATA' =>$ExamInvigilator,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
     }
 
     /**
@@ -37,6 +60,19 @@ class InvigilatorController extends Controller
     public function show($id)
     {
         //
+        $ExamInvigilator = ExamInvigilator::findOrFail($id);
+
+        if(!$ExamInvigilator){
+            return response([
+                'Message' => 'Invigilator Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        return response([
+            'CREATED_DATA' =>$ExamInvigilator,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
     }
 
     /**
@@ -49,6 +85,24 @@ class InvigilatorController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ExamInvigilator = ExamInvigilator::findOrFail($id);
+
+        if(!$ExamInvigilator){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],400);
+        }
+
+        $ExamInvigilator->update($request->all());
+
+        return response([
+            'CREATED_DATA' =>$ExamInvigilator,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
+
     }
 
     /**
@@ -60,5 +114,20 @@ class InvigilatorController extends Controller
     public function destroy($id)
     {
         //
+        $ExamInvigilator = ExamInvigilator::findOrFail($id);
+
+        if(!$ExamInvigilator){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],400);
+        }
+
+        $ExamInvigilator->delete();
+
+        return response([
+            'Message' => 'Deleted Successfully',
+            'Status' => 'OK'
+        ],200);
     }
 }
