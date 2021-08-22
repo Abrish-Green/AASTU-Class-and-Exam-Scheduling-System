@@ -9,21 +9,21 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+
+//ResetEmail
+//-----------------
+
+
+
 //Registrar Routes
 //------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 //Public
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-Route::prefix('registrar')->group(function () {
+Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Admin\AdminController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Admin\AdminController::class,'login']);
-
-
-
-
-
-
 
 });
 
@@ -136,3 +136,10 @@ Route::middleware('auth:sanctum')->prefix('instructor')->group(function(){
     Route::delete('/delete/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'delete']);
     Route::post('/logout',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'logout']);
 });
+
+
+
+Route::get('/sendbasicemail',[\App\Http\Controllers\MailController::class,'basic_email']);
+Route::get('/sendhtmlemail',[\App\Http\Controllers\MailController::class,'html_email']);
+Route::get('/sendattachmentemail',[\App\Http\Controllers\MailController::class,'attachment_email']);
+

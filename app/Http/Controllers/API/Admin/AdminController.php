@@ -15,14 +15,22 @@ class AdminController extends Controller
     public function register(Request $request)
     {
         //
+
         $Validated = $request->validate([
-            'name' => 'required',
-            'email' => 'email|required|unique:registrar',
+            'username' => 'required',
+            'email' => 'email|required',
             'password' => 'required',
         ]);
 
+        $CheckEmail = Registrar::where('email', $Validated['email'])->count();
+        if($CheckEmail > 0) {
+            return response([
+                'Message' => 'Email Already Exists',
+                'Status' => 'OK'
+            ],200);
+        }
         $adminUser = Registrar::create([
-            'name' => $Validated['name'],
+            'name' => $Validated['username'],
             'email' => $Validated['email'],
             'password' => Hash::make($Validated['password'])
         ]);
@@ -51,7 +59,7 @@ class AdminController extends Controller
         if(!($adminUser && Hash::check($Validated['password'],$adminUser->password))){
                 return response([
                     'Message' => 'User Not Found'
-                ],401);
+                ],200);
         }
 
         $token = $adminUser->createToken('token')->plainTextToken;
