@@ -8,6 +8,11 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\ErrorHandler\Debug;
+use Illuminate\Support\Str;
+
+use function Psy\debug;
 
 class AdminController extends Controller
 {
@@ -94,4 +99,54 @@ class AdminController extends Controller
 
         return $response;
     }
+
+
+    public function resetPassword(Request $request){
+
+
+        try{
+        $resetEmail = $request->email;
+        $validated_data = $request->validate([
+            'email' => 'required | email'
+        ]);
+
+        $user = Registrar::where('email',$validated_data['email'])->get();
+
+        if($user->count() > 0){
+           $username = $user[0]->name;
+           $password  = Str::random(8);
+           Registrar::where('email', $validated_data['email'])
+                       ->update(['password' => Hash::make( $password )]);
+            $data = array(
+                'name'=>"AASTU Class and Exam Scheduling System",
+                'username' =>$username,
+                'email' => $validated_data['email'],
+                'password' => $password
+            );
+            Mail::send('mail', $data, function($message) use ($data) {
+
+                $message->to($data['email'],$data['username'])->subject('Password Resetting Email');
+                $message->from('Abrham365muche@gmail.com','Mr Abrham');
+            });
+
+            return response([
+                'Message' => 'Successfully Sent. Please Check Your Email',
+                'Status' => 'OK'
+            ],200);
+        }else{
+            return response([
+                'Message' => 'Email Doesn\'t Exists',
+                'Status' => 'OK'
+            ],200);
+
+        }
+    }catch(Exception $e){
+            return response([
+                'Error' => [$e]
+            ],200);
+         }
+
+
+    }
+
 }

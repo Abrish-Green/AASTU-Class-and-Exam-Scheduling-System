@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use BadMethodCallException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Swift_TransportException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -82,6 +83,16 @@ class Handler extends ExceptionHandler
                 ],404);
             }
         });
+        $this->renderable(function (Swift_TransportException $e,$request) {
+            //
+            if($request->is('api/*')){
+                return response()->json([
+                    'Message' => 'No Internet Connection',
+                    'Error_detail'=>[$e->getMessage()]
+                ],404);
+            }
+        });
+
 
 
 

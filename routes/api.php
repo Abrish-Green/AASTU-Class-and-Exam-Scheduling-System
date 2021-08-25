@@ -21,9 +21,11 @@ use Illuminate\Support\Facades\Route;
 //Public
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
+
 Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Admin\AdminController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Admin\AdminController::class,'login']);
+    Route::post('reset',[\App\Http\Controllers\API\Admin\AdminController::class,'resetPassword']);
 
 });
 
