@@ -103,7 +103,6 @@ class AdminController extends Controller
 
     public function resetPassword(Request $request){
 
-
         try{
         $resetEmail = $request->email;
         $validated_data = $request->validate([
@@ -118,6 +117,7 @@ class AdminController extends Controller
            Registrar::where('email', $validated_data['email'])
                        ->update(['password' => Hash::make( $password )]);
             $data = array(
+                'title' => 'Password Resetting Email',
                 'name'=>"AASTU Class and Exam Scheduling System",
                 'username' =>$username,
                 'email' => $validated_data['email'],

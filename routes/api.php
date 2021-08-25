@@ -26,6 +26,10 @@ Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Admin\AdminController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Admin\AdminController::class,'login']);
     Route::post('reset',[\App\Http\Controllers\API\Admin\AdminController::class,'resetPassword']);
+    //logged
+    Route::post('/create-college',[\App\Http\Controllers\API\privates\college\CollegeAccountController::class,'store']);
+    Route::post('/create-college-user',[\App\Http\Controllers\API\privates\college\CollegeUserController::class,'register']);
+    Route::post('/create-college-user-email',[\App\Http\Controllers\API\privates\college\CollegeUserController::class,'sendEmailToCollege']);
 
 });
 
@@ -34,6 +38,12 @@ Route::prefix('registrar')->middleware(['cors'])->group(function () {
 //-------------------------------------------------------------------------------------------------
 Route::middleware('auth:sanctum')->prefix('admin')->group(function(){
     Route::get('/user',[\App\Http\Controllers\API\Admin\AdminController::class,'admin']);
+
+
+
+
+
+
     Route::post('/logout',[\App\Http\Controllers\API\Admin\AdminController::class,'logout']);
 });
 

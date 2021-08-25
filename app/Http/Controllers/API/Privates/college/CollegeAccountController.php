@@ -34,6 +34,7 @@ class CollegeAccountController extends Controller
             'name' => $Validated['name'],
         ]);
         return response([
+            'DATA' =>  $college,
             'Message'=>'College Successfully Created',
             'Status' => 'OK'
         ],200);

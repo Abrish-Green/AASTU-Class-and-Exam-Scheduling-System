@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CollegeUserController extends Controller
 {
@@ -107,5 +109,52 @@ class CollegeUserController extends Controller
         return $response;
     }
 
+    public function sendEmailToCollege(Request $request){
+
+    try{
+            $resetEmail = $request->email;
+            $validated_data = $request->validate([
+                'email' => 'required | email'
+            ]);
+
+            $user = CollegeUser::where('email',$validated_data['email'])->get();
+
+            if($user->count() > 0){
+               $username = $user[0]->name;
+               $password  = Str::random(8);
+               CollegeUser::where('email', $validated_data['email'])
+                           ->update(['password' => Hash::make( $password )]);
+                $data = array(
+                    'title' => 'College Dean Demo Account',
+                    'name'=>"AASTU Class and Exam Scheduling System",
+                    'username' =>$username,
+                    'email' => $validated_data['email'],
+                    'password' => $password
+                );
+                Mail::send('mail', $data, function($message) use ($data) {
+
+                    $message->to($data['email'],$data['username'])->subject('Invitation for College Dean');
+                    $message->from('Abrham365muche@gmail.com','Mr Abrham');
+                });
+
+                return response([
+                    'Message' => 'Successfully Sent. Please Check Your Email',
+                    'Status' => 'OK'
+                ],200);
+            }else{
+                return response([
+                    'Message' => 'Email Doesn\'t Exists',
+                    'Status' => 'OK'
+                ],200);
+
+            }
+        }catch(Exception $e){
+                return response([
+                    'Error' => [$e]
+                ],200);
+             }
+
+
+    }
 
 }
