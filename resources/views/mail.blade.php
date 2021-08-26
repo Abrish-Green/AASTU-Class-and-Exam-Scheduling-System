@@ -211,7 +211,7 @@
     <p>New Password : {{ $password }}</p>
     <p>
         <strong>
-            After you login using the password.Please change your password for you safety.
+            After you login using the password.Please change your password for your safety.
         </strong>
     </p>
 </span></p>

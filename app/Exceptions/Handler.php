@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use BadMethodCallException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Swift_TransportException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -45,7 +46,7 @@ class Handler extends ExceptionHandler
             if($request->is('api/*')){
                 return response()->json([
                     'Message' => 'Object Not Found',
-                    'Error_detail'=>[$e]],404);
+                    'Error_detail'=>[$e]],200);
             }
         });
         $this->renderable(function (RouteNotFoundException $e,$request) {
@@ -53,7 +54,7 @@ class Handler extends ExceptionHandler
             if($request->is('api/*')){
                 return response()->json([
                     'Message' => 'Unauthorized',
-                    'Error_detail'=>[$e->getMessage()]],404);
+                    'Error_detail'=>[$e->getMessage()]],200);
             }
         });
         $this->renderable(function (MethodNotAllowedHttpException $e,$request) {
@@ -62,7 +63,7 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'Message' => 'Wrong Request Method Used',
                     'Error_detail'=>[$e->getMessage()]
-                ],404);
+                ],200);
             }
         });
         $this->renderable(function (BadMethodCallException $e,$request) {
@@ -71,7 +72,7 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'Message' => 'Wrong Method Used',
                     'Error_detail'=>[$e->getMessage()]
-                ],404);
+                ],200);
             }
         });
         $this->renderable(function (QueryException $e,$request) {
@@ -80,7 +81,7 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'Message' => 'Problem with SQL Query',
                     'Error_detail'=>[$e->getMessage()]
-                ],404);
+                ],200);
             }
         });
         $this->renderable(function (Swift_TransportException $e,$request) {
@@ -89,11 +90,20 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'Message' => 'No Internet Connection',
                     'Error_detail'=>[$e->getMessage()]
-                ],404);
+                ],200);
+            }
+        });
+        $this->renderable(function (ThrottleRequestsException $e,$request) {
+            //
+            if($request->is('api/*')){
+                return response()->json([
+                    'Message' => 'Too many Attempt.Try Later ',
+                    'Error_detail'=>[$e->getMessage()]
+                ],200);
             }
         });
 
-
+        
 
 
     }

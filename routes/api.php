@@ -27,6 +27,8 @@ Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::post('login',[\App\Http\Controllers\API\Admin\AdminController::class,'login']);
     Route::post('reset',[\App\Http\Controllers\API\Admin\AdminController::class,'resetPassword']);
     //logged
+    Route::get('/colleges',[\App\Http\Controllers\API\privates\college\CollegeAccountController::class,'index']);
+    Route::post('/colleges/delete/{id}',[\App\Http\Controllers\API\privates\college\CollegeAccountController::class,'destroy']);
     Route::post('/create-college',[\App\Http\Controllers\API\privates\college\CollegeAccountController::class,'store']);
     Route::post('/create-college-user',[\App\Http\Controllers\API\privates\college\CollegeUserController::class,'register']);
     Route::post('/create-college-user-email',[\App\Http\Controllers\API\privates\college\CollegeUserController::class,'sendEmailToCollege']);

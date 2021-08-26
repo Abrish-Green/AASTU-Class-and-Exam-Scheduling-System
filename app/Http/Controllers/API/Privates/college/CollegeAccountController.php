@@ -101,7 +101,7 @@ class CollegeAccountController extends Controller
             return response([
                 'Message' => 'College Not Found',
                 'Status' => 'OK'
-            ],401);
+            ],200);
         }
         College::findOrFail($id)->delete();
         return response([
