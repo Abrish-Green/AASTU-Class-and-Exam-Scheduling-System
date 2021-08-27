@@ -33,7 +33,7 @@ class DepartmentAccountController extends Controller
   // dd();
         $department = Department::create([
             'name' => $Validated['name'],
-            'college_id' => Auth::user()->department->college_id
+            'college_id' => $request->college_id
         ]);
         return response([
             'Department' => $department,

@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class DepartmentUserController extends Controller
 {
@@ -17,7 +19,7 @@ class DepartmentUserController extends Controller
     try{
             $Validated = $request->validate([
                 'name' => 'required',
-                'email' => 'email|required|unique:department_users',
+                'email' => 'email|required',
                 'password' => 'required',
                 //'active' => 'required',
                 'department_id' => 'required'
@@ -43,7 +45,7 @@ class DepartmentUserController extends Controller
             $token = $departmentUser->createToken($Validated['email'])->plainTextToken;
 
             $response = [
-                'CollegeUser' => $departmentUser,
+                'DepartmentUser' => $departmentUser,
                 'Token' => $token
             ];
 
@@ -106,4 +108,56 @@ class DepartmentUserController extends Controller
             'Status' => 'OK'
         ],200);
     }
+
+    public function send_email_to_head(Request $request){
+
+        try{
+                $resetEmail = $request->email;
+                $validated_data = $request->validate([
+                    'email' => 'required | email'
+                ]);
+
+                $user = DepartmentUser::where('email',$validated_data['email'])->get();
+
+                if($user->count() > 0){
+                   $username = $user[0]->name;
+                   $password  = Str::random(8);
+                   DepartmentUser::where('email', $validated_data['email'])
+                               ->update(['password' => Hash::make( $password )]);
+                    $data = array(
+                        'title' => 'Department Head Demo Account',
+                        'name'=>"AASTU Class and Exam Scheduling System",
+                        'username' =>$username,
+                        'email' => $validated_data['email'],
+                        'password' => $password
+                    );
+                    Mail::send('mail', $data, function($message) use ($data) {
+
+                        $message->to($data['email'],$data['username'])->subject('Invitation for Department Head');
+                        $message->from('Abrham365muche@gmail.com','Mr Abrham');
+                    });
+
+                    return response([
+                        'Message' => 'Successfully Sent. Please Check Your Email',
+                        'Status' => 'OK'
+                    ],200);
+                }else{
+                    return response([
+                        'Message' => 'Email Doesn\'t Exists',
+                        'Status' => 'OK'
+                    ],200);
+
+                }
+            }catch(Exception $e){
+                    return response([
+                        'Error' => [$e]
+                    ],200);
+                 }
+
+
+        }
+
+
 }
+
+

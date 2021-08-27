@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Privates\college;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
+use App\Models\Department;
 use Illuminate\Http\Request;
 
 class CollegeAccountController extends Controller
@@ -14,6 +15,13 @@ class CollegeAccountController extends Controller
         $colleges = College::all();
         return response([
             'college' => $colleges
+        ],200);
+    }
+    public function departments(Request $request,$id)
+    {
+        $department = Department::where('college_id', $id)->get();
+        return response([
+            'department' => $department
         ],200);
     }
 

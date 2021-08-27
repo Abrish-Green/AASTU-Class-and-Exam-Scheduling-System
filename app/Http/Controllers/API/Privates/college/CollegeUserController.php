@@ -15,6 +15,22 @@ use Illuminate\Support\Str;
 class CollegeUserController extends Controller
 {
     //
+
+    public function DeanUpdater(Request $request)
+    {
+
+        $college = CollegeUser::findOrFail($request->id);
+
+        $college->name = $request->name;
+        $college->password =  Hash::make($request->password);
+        $college->save();
+            return response([
+                'Updated id' => $request->id,
+                'Message'=>'College Successfully Updated',
+                'Status' => 'OK'
+            ],200);
+
+    }
     public function register(Request $request){
         //
     try{
@@ -74,13 +90,13 @@ class CollegeUserController extends Controller
                 return response([
                     'Message' => 'College User Not Found',
                     'Status' => 'OK'
-                ],400);
+                ],200);
         }
 
         $token = $collegeUser->createToken('token')->plainTextToken;
 
         $response = [
-            'Admin' => $collegeUser,
+            'College' => $collegeUser,
             'Token' => $token
         ];
         }catch(Exception $e){
@@ -156,5 +172,56 @@ class CollegeUserController extends Controller
 
 
     }
+
+    public function reset(Request $request){
+
+        try{
+        $resetEmail = $request->email;
+        $validated_data = $request->validate([
+            'email' => 'required | email'
+        ]);
+
+        $user = CollegeUser::where('email',$validated_data['email'])->get();
+
+        if($user->count() > 0){
+           $username = $user[0]->name;
+           $password  = Str::random(8);
+           CollegeUser::where('email', $validated_data['email'])
+                       ->update(['password' => Hash::make( $password )]);
+            $data = array(
+                'title' => 'Password Resetting Email',
+                'name'=>"AASTU Class and Exam Scheduling System",
+                'username' =>$username,
+                'email' => $validated_data['email'],
+                'password' => $password
+            );
+            Mail::send('mail', $data, function($message) use ($data) {
+
+                $message->to($data['email'],$data['username'])->subject('Password Resetting Email');
+                $message->from('Abrham365muche@gmail.com','Mr Abrham');
+            });
+
+            return response([
+                'Message' => 'Successfully Sent. Please Check Your Email',
+                'Status' => 'OK'
+            ],200);
+        }else{
+            return response([
+                'Message' => 'Email Doesn\'t Exists',
+                'Status' => 'OK'
+            ],200);
+
+        }
+    }catch(Exception $e){
+            return response([
+                'Error' => [$e]
+            ],200);
+         }
+
+
+    }
+
+
+
 
 }
