@@ -21,8 +21,10 @@ class CreateDepartmentUsersTable extends Migration
             $table->boolean('active')->default(1);
             $table->string('remember_token')->default('');
             $table->BigInteger('department_id')->unsigned()->index();
+            $table->BigInteger('college_id')->unsigned()->index();
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->foreign('college_id')->references('id')->on('colleges')->onDelete('cascade');
        });
     }
 

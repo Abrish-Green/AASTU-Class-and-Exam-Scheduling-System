@@ -15,7 +15,8 @@ class DepartmentUser extends Model
         'email',
         'password',
         'remember_token',
-        'department_id'
+        'department_id',
+        'college_id'
     ];
 
     protected $hidden = [
@@ -25,6 +26,9 @@ class DepartmentUser extends Model
 
     public function department(){
         return $this->belongsTo(\App\Models\Department::class);
+    }
+    public function departmentUsers(){
+        return $this->hasMany(\App\Models\DepartmentUser::class);
     }
     public function college(){
        return $this->belongsTo(\App\Models\College::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\privates\department;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\DepartmentUser;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class DepartmentUserController extends Controller
                 'email' => 'email|required',
                 'password' => 'required',
                 //'active' => 'required',
-                'department_id' => 'required'
+                'department_id' => 'required',
+                'college_id' => 'required'
             ]);
 
             //Check College
@@ -32,14 +34,15 @@ class DepartmentUserController extends Controller
                 return response([
                 'Message' => 'Department Not Found',
                     'Status' => 'OK'
-                ],400);
+                ],200);
             }
             $departmentUser = DepartmentUser::create([
                 'name' => $Validated['name'],
                 'email' => $Validated['email'],
                 'password' => Hash::make($Validated['password']),
                 'remember_token' => '',
-                'department_id' => $Validated['department_id']
+                'department_id' => $Validated['department_id'],
+                'college_id' => $Validated['college_id']
             ]);
 
             $token = $departmentUser->createToken($Validated['email'])->plainTextToken;
@@ -119,7 +122,7 @@ class DepartmentUserController extends Controller
 
                 $user = DepartmentUser::where('email',$validated_data['email'])->get();
 
-                if($user->count() > 0){
+                if($user->count() > 0 || true){
                    $username = $user[0]->name;
                    $password  = Str::random(8);
                    DepartmentUser::where('email', $validated_data['email'])
@@ -158,6 +161,59 @@ class DepartmentUserController extends Controller
         }
 
 
+
+    public function getMyDepartmentHeads(Request $request){
+
+
+        $myCollegeDepartmentHeads = DepartmentUser::where('college_id',$request->college_id)->get();
+
+          return response([
+              'CREATED_DATA' =>$myCollegeDepartmentHeads,
+              'Message' => 'Successful',
+              'Status' => 'OK'
+          ],200);
+
+
+
+    }
+
+    public function destroy($id)
+    {
+        //
+
+        $departmentHead = DepartmentUser::findOrFail($id);
+        if(!$departmentHead){
+            return response([
+                'Message' => 'Department Head Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        DepartmentUser::findOrFail($id)->delete();
+        return response([
+            'Message'=>'Department Head Successfully Deleted',
+            'Status' => 'OK'
+        ],200);
+    }
+
+    public function edit(Request $request, $id){
+        $department_head = DepartmentUser::findOrFail($id);
+
+        if(!$department_head){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+
+        $department_head->update($request->all());
+
+        return response([
+            'CREATED_DATA' =>$department_head,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
+    }
 }
 
 

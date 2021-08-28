@@ -68,6 +68,10 @@ Route::prefix('college')->group(function () {
     Route::post('create-college-user-email',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'send_email_to_head']);
     Route::post('/delete/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'destroy']);
     Route::get('/{id}/departments/',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'getMyDepartment']);
+    Route::post('/department/heads',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'getMyDepartmentHeads']);
+    Route::post('/department/head/edit/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'edit']);
+
+    Route::post('/department-head/delete/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'destroy']);
 
 
 

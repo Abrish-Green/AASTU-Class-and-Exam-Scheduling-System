@@ -92,7 +92,7 @@ class CourseToInstructorController extends Controller
             return response([
                 'Message' => 'Not Found',
                 'Status' => 'OK'
-            ],400);
+            ],200);
         }
 
         $course_to_instructor->update($request->all());
