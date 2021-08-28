@@ -16,7 +16,13 @@ class DepartmentAccountController extends Controller
             'department' => $department
         ],200);
     }
-
+    public function getMyDepartment($id)
+    {
+        $department = Department::where('college_id', $id)->get();
+        return response([
+            'department' => $department
+        ],200);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -56,7 +62,7 @@ class DepartmentAccountController extends Controller
             return response([
                 'Message' => 'Department Not Found',
                 'Status' => 'OK'
-            ],401);
+            ],200);
         }
 
         return response([
@@ -88,7 +94,7 @@ class DepartmentAccountController extends Controller
             return response([
                 'Message' => 'Department Not Updated',
                 'Status' => 'OK'
-            ],400);
+            ],200);
 
         }
         return response([
@@ -114,7 +120,7 @@ class DepartmentAccountController extends Controller
             return response([
                 'Message' => 'Department Not Found',
                 'Status' => 'OK'
-            ],400);
+            ],200);
         }
         Department::findOrFail($id)->delete();
         return response([

@@ -51,8 +51,8 @@ class DepartmentUserController extends Controller
 
      }catch(Exception $e){
         return response([
-            'Error' => [$e->getMessage() , $e->errors()]
-        ],400);
+            'Error' => [$e->getMessage()]
+        ],200);
      }
 
         return response($response,200);

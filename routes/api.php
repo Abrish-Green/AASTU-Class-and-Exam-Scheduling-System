@@ -60,11 +60,15 @@ Route::prefix('college')->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Privates\college\CollegeUserController::class,'register']);
 
     Route::post('updates',[ App\Http\Controllers\API\Privates\college\CollegeUserController::class,'DeanUpdater']);
+    Route::post('/department/edit/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'update']);
     Route::post('reset',[ App\Http\Controllers\API\Privates\college\CollegeUserController::class,'reset']);
     Route::post('departments',[ App\Http\Controllers\API\Privates\college\CollegeAccountController::class,'index']);
     Route::post('create-department',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'store']);
     Route::post('create-department-user',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'register']);
     Route::post('create-college-user-email',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'send_email_to_head']);
+    Route::post('/delete/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'destroy']);
+    Route::get('/{id}/departments/',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'getMyDepartment']);
+
 
 
     Route::post('login',[\App\Http\Controllers\API\Privates\college\CollegeUserController::class,'login']);
