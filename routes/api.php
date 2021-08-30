@@ -70,6 +70,7 @@ Route::prefix('college')->group(function () {
     Route::get('/{id}/departments/',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'getMyDepartment']);
     Route::post('/department/heads',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'getMyDepartmentHeads']);
     Route::post('/department/head/edit/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'edit']);
+    Route::get('/department/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'show']);
 
     Route::post('/department-head/delete/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'destroy']);
 
@@ -96,6 +97,23 @@ Route::middleware('auth:sanctum')->prefix('college')->group(function(){
 Route::prefix('department')->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'login']);
+    Route::post('complete_info',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'update']);
+    Route::post('reset',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'reset']);
+
+    Route::post('/edit/{id}',[\App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'update']);
+    Route::post('/create-instructor',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'register']);
+    Route::post('/create-instructor-email',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'send_email_to_instructor']);
+
+
+
+    Route::get('/account/{id}',[\App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'show']);
+    Route::post('/instructor/delete/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'destroy']);
+    Route::post('/instructor/edit/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'update']);
+    Route::get('/{id}/instructors',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'getMyInstructors']);
+
+
+
+
 
     Route::post('/block/add',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'addBlock']);
     Route::post('/room/add',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'addRoom']);

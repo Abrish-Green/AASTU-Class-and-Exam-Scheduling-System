@@ -78,14 +78,14 @@ class DepartmentUserController extends Controller
                 return response([
                     'Message' => 'Department User Not Found',
                     'Status' => 'OK'
-                ],400);
+                ],200);
         }
 
         $token = $departmentUser->createToken('token')->plainTextToken;
 
         $response = [
-            'Admin' => $departmentUser,
-            'Token' => $token
+            'department' => $departmentUser,
+            'token' => $token
         ];
         }catch(Exception $e){
             return response([
@@ -110,6 +110,22 @@ class DepartmentUserController extends Controller
             'Message' => 'Logged out',
             'Status' => 'OK'
         ],200);
+    }
+
+    public function update(Request $request)
+    {
+        //
+        $departmentUser = DepartmentUser::findOrFail($request->id);
+
+        $departmentUser->name = $request->name;
+        $departmentUser->password =  Hash::make($request->password);
+        $departmentUser->save();
+            return response([
+                'Updated id' => $departmentUser,
+                'Message'=>'College Successfully Updated',
+                'Status' => 'OK'
+            ],200);
+
     }
 
     public function send_email_to_head(Request $request){
@@ -176,6 +192,56 @@ class DepartmentUserController extends Controller
 
 
     }
+
+    public function reset(Request $request){
+
+        try{
+        $resetEmail = $request->email;
+        $validated_data = $request->validate([
+            'email' => 'required | email'
+        ]);
+
+        $user = DepartmentUser::where('email',$validated_data['email'])->get();
+
+        if($user->count() > 0){
+           $username = $user[0]->name;
+           $password  = Str::random(8);
+           DepartmentUser::where('email', $validated_data['email'])
+                       ->update(['password' => Hash::make( $password )]);
+            $data = array(
+                'title' => 'Password Resetting Email',
+                'name'=>"AASTU Class and Exam Scheduling System",
+                'username' =>$username,
+                'email' => $validated_data['email'],
+                'password' => $password
+            );
+            Mail::send('mail', $data, function($message) use ($data) {
+
+                $message->to($data['email'],$data['username'])->subject('Password Resetting Email');
+                $message->from('Abrham365muche@gmail.com','Mr Abrham');
+            });
+
+            return response([
+                'Message' => 'Successfully Sent. Please Check Your Email',
+                'Status' => 'OK'
+            ],200);
+        }else{
+            return response([
+                'Message' => 'Email Doesn\'t Exists',
+                'Status' => 'OK'
+            ],200);
+
+        }
+    }catch(Exception $e){
+            return response([
+                'Error' => [$e]
+            ],200);
+         }
+
+
+    }
+
+
 
     public function destroy($id)
     {

@@ -9,9 +9,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class InstructorUserController extends Controller
 {
+
+
+    public function getMyInstructors($id){
+
+        try{
+
+            $instructors = Instructor::where('department_id', $id)->get();
+            return response([
+                'instructors' => $instructors,
+                'Message' => 'Successful'
+            ],200);
+
+        }catch(Exception $e){
+
+            return response([
+                'Error' => [$e->getMessage() , $e->errors()]
+            ],200);
+
+        }
+
+    }
+
+
 
     public function register(Request $request)
     {
@@ -19,9 +44,9 @@ class InstructorUserController extends Controller
         try{
             $Validated = $request->validate([
                 'name' => 'required',
-                'email' => 'email|required|unique:instructors',
+                'email' => 'email|required', //|unique:instructors
                 'password' => 'required',
-                //'active' => 'required',
+                'active' => 'required',
                 'department_id' => 'required'
             ]);
 
@@ -32,7 +57,7 @@ class InstructorUserController extends Controller
                 return response([
                 'Message' => 'Department Not Found',
                     'Status' => 'OK'
-                ],400);
+                ],200);
             }
             $instructor = Instructor::create([
                 'name' => $Validated['name'],
@@ -45,14 +70,14 @@ class InstructorUserController extends Controller
             $token = $instructor->createToken($Validated['email'])->plainTextToken;
 
             $response = [
-                'Instructor' => $instructor,
-                'Token' => $token
+                'instructor' => $instructor,
+                'token' => $token
             ];
 
      }catch(Exception $e){
         return response([
             'Error' => [$e->getMessage() , $e->errors()]
-        ],400);
+        ],200);
      }
 
         return response($response,200);
@@ -191,4 +216,77 @@ class InstructorUserController extends Controller
 
 
     }
+
+    public function send_email_to_instructor(Request $request){
+
+        try{
+                $resetEmail = $request->email;
+                $validated_data = $request->validate([
+                    'email' => 'required | email'
+                ]);
+
+                $user = Instructor::where('email',$validated_data['email'])->get();
+
+                if($user->count() > 0 || true){
+                   $username = $user[0]->name;
+                   $password  = Str::random(8);
+                   Instructor::where('email', $validated_data['email'])
+                               ->update(['password' => Hash::make( $password )]);
+                    $data = array(
+                        'title' => 'Instructor Demo Account',
+                        'name'=>"AASTU Class and Exam Scheduling System",
+                        'username' =>$username,
+                        'email' => $validated_data['email'],
+                        'password' => $password
+                    );
+                    Mail::send('mail', $data, function($message) use ($data) {
+
+                        $message->to($data['email'],$data['username'])->subject('Invitation for Instructor');
+                        $message->from('Abrham365muche@gmail.com','Mr Abrham');
+                    });
+
+                    return response([
+                        'Message' => 'Successfully Sent. Please Check Your Email',
+                        'Status' => 'OK'
+                    ],200);
+                }else{
+                    return response([
+                        'Message' => 'Email Doesn\'t Exists',
+                        'Status' => 'OK'
+                    ],200);
+
+                }
+            }catch(Exception $e){
+                    return response([
+                        'Error' => [$e]
+                    ],200);
+                 }
+
+
+        }
+
+
+        public function destroy($id)
+        {
+            //
+
+            $departmentHead = Instructor::findOrFail($id);
+            if(!$departmentHead){
+                return response([
+                    'Message' => 'Instructor Not Found',
+                    'Status' => 'OK'
+                ],200);
+            }
+            Instructor::find($id)->delete();
+            return response([
+                'Message'=>'Instructor Successfully Deleted',
+                'Status' => 'OK'
+            ],200);
+        }
+
+
+
+
+
+
 }
