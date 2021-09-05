@@ -5,9 +5,11 @@ namespace App\Http\Controllers\api\privates\placement;
 use App\Http\Controllers\Controller;
 use App\Models\Block;
 use App\Models\Classes;
+use App\Models\CollegeBlock;
 use App\Models\CustomRoom;
 use App\Models\LabRoom;
 use App\Models\Room;
+use Exception;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Array_;
 
@@ -16,11 +18,93 @@ class PlacementController extends Controller
     //
     public function addBlock(Request $request){ //department
         $block = Block::create([
-            'block_name' => $request->name,
+            'block_name' => $request->block_name,
         ]);
 
         return response([
             'CREATED_DATA' =>$block,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
+    public function deleteBlock($id){ //department
+
+        try{
+             Block::findOrFail($id)->delete();
+
+            return response([
+                'Message' => 'Successful',
+                'Status' => 'OK'
+            ],200);
+
+        }catch(Exception $e){
+            return response([
+                'Message' => 'Successful',
+                'Status' => 'OK',
+                'Error'=> $e
+            ],200);
+        }
+
+    }
+    public function useBlock(Request $request){ //department
+        try{
+             $college_block = CollegeBlock::create([
+                'block_id' => $request->block_id,
+                'college_id' => $request->college_id
+                ]);
+
+            return response([
+                'college_block' =>  $college_block,
+                'Message' => 'Successful',
+                'Status' => 'OK'
+            ],200);
+
+        }catch(Exception $e){
+            return response([
+                'Message' => 'UnSuccessful',
+                'Status' => 'OK',
+                'Error'=> $e
+            ],200);
+        }
+
+    }
+
+    public function usedBlock(Request $request){ //department
+        try{
+             $college_block = CollegeBlock::where('college_id', $request->college_id)->get();
+
+            return response([
+                'college_block' =>  $college_block,
+                'Message' => 'Successful',
+                'Status' => 'OK'
+            ],200);
+
+        }catch(Exception $e){
+            return response([
+                'Message' => 'UnSuccessful',
+                'Status' => 'OK',
+                'Error'=> $e
+            ],200);
+        }
+
+    }
+
+
+    public function getMyBlock(Request $request){
+        $getmyblock = CollegeBlock::where('college_id',$request->college_id)->get();
+
+        return response([
+            'block' => $getmyblock,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
+
+    public function index(Request $request){ //department
+        $block = Block::all();
+
+        return response([
+            'block' =>$block,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);

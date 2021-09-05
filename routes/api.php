@@ -33,12 +33,17 @@ Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::post('/create-college-user',[\App\Http\Controllers\API\privates\college\CollegeUserController::class,'register']);
     Route::post('/create-college-user-email',[\App\Http\Controllers\API\privates\college\CollegeUserController::class,'sendEmailToCollege']);
 
+
+    Route::post('/create/block',[\App\Http\Controllers\Api\privates\placement\PlacementController::class,'addBlock']);
+    Route::get('/get/blocks',[\App\Http\Controllers\Api\privates\placement\PlacementController::class,'index']);
+    Route::post('/block/{id}/delete',[\App\Http\Controllers\Api\privates\placement\PlacementController::class,'deleteBlock']);
+
 });
 
 //Protected
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-Route::middleware('auth:sanctum')->prefix('admin')->group(function(){
+Route::middleware('auth:sanctum')->prefix('registrar')->group(function(){
     Route::get('/user',[\App\Http\Controllers\API\Admin\AdminController::class,'admin']);
 
 
@@ -73,6 +78,12 @@ Route::prefix('college')->group(function () {
     Route::get('/department/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'show']);
 
     Route::post('/department-head/delete/{id}',[ App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'destroy']);
+
+
+    Route::post('/get/block/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'getMyBlock']);
+    Route::post('/use/block/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'useBlock']);
+    Route::post('/used/block/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'usedBlock']);
+
 
 
 
@@ -110,6 +121,9 @@ Route::prefix('department')->group(function () {
     Route::post('/instructor/delete/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'destroy']);
     Route::post('/instructor/edit/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'update']);
     Route::get('/{id}/instructors',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'getMyInstructors']);
+
+
+    Route::post('/create/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'store']);
 
 
 

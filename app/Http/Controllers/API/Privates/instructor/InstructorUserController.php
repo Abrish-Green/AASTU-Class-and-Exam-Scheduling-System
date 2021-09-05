@@ -108,7 +108,7 @@ class InstructorUserController extends Controller
                 return response([
                     'Message' => 'Instructor User Not Found',
                     'Status' => 'OK'
-                ],400);
+                ],200);
         }
 
         $token = $instructor->createToken('token')->plainTextToken;
@@ -193,7 +193,7 @@ class InstructorUserController extends Controller
             return response([
                 'Message' => 'Instructor Not Updated',
                 'Status' => 'OK'
-            ],400);
+            ],200);
         }
 
         $DEFAULT_PASSWORD = Hash::make('default');

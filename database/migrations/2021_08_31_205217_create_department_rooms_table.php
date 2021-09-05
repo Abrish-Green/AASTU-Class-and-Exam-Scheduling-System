@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlockToRoomsTable extends Migration
+class CreateDepartmentRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,17 @@ class CreateBlockToRoomsTable extends Migration
      */
     public function up()
     {
-
-        Schema::create('block_to_rooms', function (Blueprint $table) {
+        Schema::create('department_rooms', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('room_id')->unsigned()->index();
             $table->bigInteger('block_id')->unsigned()->index();
             $table->bigInteger('department_id')->unsigned()->index();
             $table->bigInteger('college_id')->unsigned()->index();
             $table->timestamps();
-
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('block_id')->references('id')->on('blocks')->onDelete('cascade');
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-            $table->foreign('college_id')->references('id')->on('colleges')->onDelete('cascade');
+            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->foreign('block_id')->references('id')->on('blocks');
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->foreign('college_id')->references('id')->on('colleges');
         });
     }
 
@@ -36,6 +34,6 @@ class CreateBlockToRoomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('block__to__rooms');
+        Schema::dropIfExists('department_rooms');
     }
 }

@@ -84,7 +84,7 @@ class AdminController extends Controller
 
     public function admin(Request $request)
     {
-        $admin=Auth::user();
+        $admin= Auth::user();
         return $admin;
     }
 
