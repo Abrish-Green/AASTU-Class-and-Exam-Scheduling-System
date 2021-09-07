@@ -121,9 +121,17 @@ Route::prefix('department')->group(function () {
     Route::post('/instructor/delete/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'destroy']);
     Route::post('/instructor/edit/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'update']);
     Route::get('/{id}/instructors',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'getMyInstructors']);
-
-
     Route::post('/create/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'store']);
+
+    Route::post('/create/class/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'store']);
+    Route::post('/create/exam/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'create_exam_section']);
+
+    Route::post('/get/class/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'getAllSection']);
+    Route::post('/get/exam/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'getAllExamSection']);
+
+    Route::post('/delete/class/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'deleteClasses']);
+    Route::post('/delete/exam/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'deleteExamClasses']);
+
 
 
 

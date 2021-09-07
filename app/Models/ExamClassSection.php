@@ -10,9 +10,10 @@ class ExamClassSection extends Model
     use HasFactory;
 
     protected $fillable = [
-        'section_name',
+        'class_name',
+        'year',
+        'semester',
         'department_id',
-        'year'
     ];
 
     public function section(){

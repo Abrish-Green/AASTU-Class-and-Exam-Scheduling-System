@@ -98,7 +98,7 @@ class DepartmentUserController extends Controller
 
     public function currentDepartmentUser(Request $request)
     {
-        return $request->user();
+        return auth()->user();
     }
 
     public function logout(Request $request)

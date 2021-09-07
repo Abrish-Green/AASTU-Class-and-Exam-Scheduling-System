@@ -15,7 +15,9 @@ class CreateExamClassSectionsTable extends Migration
     {
         Schema::create('exam_class_sections', function (Blueprint $table) {
             $table->id();
-            $table->string('section_name');
+            $table->string('class_name');
+            $table->integer('year');
+            $table->integer('semester')->unsigned()->index();
             $table->bigInteger('department_id')->unsigned()->index();
             $table->timestamps();
 

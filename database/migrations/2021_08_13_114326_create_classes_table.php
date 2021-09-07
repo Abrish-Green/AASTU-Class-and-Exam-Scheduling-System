@@ -16,7 +16,7 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('class_name');
-            $table->enum('year',[1,2,3,4,5,6,7]);
+            $table->integer('year');
             $table->integer('semester')->unsigned()->index();
             $table->bigInteger('department_id')->unsigned()->index();
             $table->timestamps();
