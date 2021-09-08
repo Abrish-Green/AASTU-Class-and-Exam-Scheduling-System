@@ -13,12 +13,12 @@ class InvigilatorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getMyInvigilators(Request $request)
     {
         //
-        $ExamInvigilator = ExamInvigilator::all();
+        $ExamInvigilator = ExamInvigilator::where('department_id', $request->department_id)->get();
         return response([
-            'CREATED_DATA' =>$ExamInvigilator,
+            'invigilators' =>$ExamInvigilator,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);
@@ -30,17 +30,18 @@ class InvigilatorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function AddInvigilator(Request $request)
     {
         //
         $Validated = $request->validate([
-            'invigilator_name' => $request->invigilator_name,
-            'active' => $request->active
+            'invigilator_name' => 'required',
+            'department_id'=> 'required'
         ]);
 
         $ExamInvigilator = ExamInvigilator::create([
             'invigilator_name' => $Validated['invigilator_name'],
-            'active' =>$Validated['active'],
+            'active' => 1,
+            'department_id'=>$Validated['department_id']
         ]);
 
         return response([

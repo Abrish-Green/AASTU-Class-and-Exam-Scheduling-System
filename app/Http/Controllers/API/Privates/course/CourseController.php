@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api\privates\course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Department;
+use Exception;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -24,6 +26,35 @@ class CourseController extends Controller
         ],200);
 
     }
+
+    public function getMyCourses(Request $request)
+    {
+        //
+        $course = Course::where('course_department_id', $request->course_department_id)->get();
+
+
+        try{
+        if(Department::findOrFail($request->course_department_id)->count() == 0){
+            return response([
+                'Message' => 'Department Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        return response([
+            'courses' =>$course,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+        }catch(Exception $e){
+            return response([
+
+                'Message' => 'Successful',
+                'Status' => 'Fail'
+            ],200);
+        }
+    }
+
+
 
     /**
      * Store a newly created resource in storage.

@@ -11,10 +11,7 @@ class ExamInvigilator extends Model
 
     protected $fillable = [
         'invigilator_name',
-        'active'
+        'active',
+        'department_id'
     ];
-
-    public function invigilator(){
-        return $this->hasMany(\App\Models\invigilator::class);
-    }
 }

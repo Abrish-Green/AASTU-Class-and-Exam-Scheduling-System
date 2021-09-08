@@ -121,8 +121,13 @@ Route::prefix('department')->group(function () {
     Route::post('/instructor/delete/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'destroy']);
     Route::post('/instructor/edit/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'update']);
     Route::get('/{id}/instructors',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'getMyInstructors']);
-    Route::post('/create/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'store']);
 
+
+    Route::post('/invigilator/add',[\App\Http\Controllers\API\Privates\exam\invigilatorController::class,'AddInvigilator']);
+    Route::post('/invigilator/get',[\App\Http\Controllers\API\Privates\exam\invigilatorController::class,'getMyInvigilators']);
+
+
+    Route::post('/create/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'store']);
     Route::post('/create/class/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'store']);
     Route::post('/create/exam/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'create_exam_section']);
 
@@ -132,6 +137,8 @@ Route::prefix('department')->group(function () {
     Route::post('/delete/class/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'deleteClasses']);
     Route::post('/delete/exam/sections',[\App\Http\Controllers\API\Privates\section\sectionController::class,'deleteExamClasses']);
 
+
+    Route::post('/courses',[\App\Http\Controllers\API\Privates\course\courseController::class,'getMyCourses']);
 
 
 
