@@ -24,7 +24,6 @@ class CreateCoursesTable extends Migration
             $table->enum('course_type',['Common_course','Major_course','Supporting_course']);
             $table->bigInteger('course_department_id')->unsigned()->index();
             $table->timestamps();
-
             $table->foreign('course_department_id')->references('id')->on('departments')->onDelete('cascade');
         });
     }

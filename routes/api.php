@@ -139,6 +139,7 @@ Route::prefix('department')->group(function () {
 
 
     Route::post('/courses',[\App\Http\Controllers\API\Privates\course\courseController::class,'getMyCourses']);
+    Route::post('/course/create',[\App\Http\Controllers\API\Privates\course\courseController::class,'store']);
 
 
 

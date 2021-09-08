@@ -67,24 +67,38 @@ class CourseController extends Controller
         //
         $Validated = $request->validate([
             'course_title' => 'required',
-            'course_name' => 'required',
+            'year' => 'required',
+            'course_code' => 'required',
             'course_credit_hour' => 'required',
             'course_has_lab' => 'required',
+            'course_has_lecture' => 'required',
             'course_type' => 'required',
             'course_department_id' => 'required',
         ]);
 
+        $didCourseExist = Course::where('course_code', $Validated['course_code'])->get();
+
+        if($didCourseExist->count() > 0){
+            return response([
+                'course' => null,
+                'Message' => 'Course Already Exists',
+                'Status' => 'OK'
+            ],200);
+        }
+
         $course = Course::create([
             'course_title' => $Validated['course_title'],
-            'course_name' =>$Validated['course_name'],
+            'year' => $Validated['year'],
+            'course_code' =>$Validated['course_code'],
             'course_credit_hour' =>$Validated['course_credit_hour'],
             'course_has_lab' =>$Validated['course_has_lab'],
+            'course_has_lecture' =>$Validated['course_has_lecture'],
             'course_type' =>$Validated['course_type'],
             'course_department_id' => $Validated['course_department_id'],
         ]);
 
         return response([
-            'CREATED_DATA' =>$course,
+            'course' =>$course,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);
