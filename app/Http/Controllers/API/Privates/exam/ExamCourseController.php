@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\privates\exam;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExamCourses;
+use App\Models\ExamSetting;
 use Illuminate\Http\Request;
 
 class ExamCourseController extends Controller
@@ -57,6 +58,41 @@ class ExamCourseController extends Controller
             'Status' => 'OK'
         ],200);
     }
+
+    public function storeExamDate(Request $request)
+    {
+        //
+        $Validated = $request->validate([
+            'semester' => 'required',
+            'starting_date'=> 'required',
+            'ending_date'=> 'required',
+
+        ]);
+
+        $Examcourse = ExamSetting::create([
+
+            'starting_date' =>$Validated['starting_date'],
+            'ending_date' =>$Validated['ending_date'],
+            'semester' =>$Validated['semester'],
+        ]);
+
+        return response([
+            'setting' =>$Examcourse,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.

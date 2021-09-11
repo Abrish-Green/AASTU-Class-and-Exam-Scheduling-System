@@ -38,6 +38,9 @@ Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::get('/get/blocks',[\App\Http\Controllers\Api\privates\placement\PlacementController::class,'index']);
     Route::post('/block/{id}/delete',[\App\Http\Controllers\Api\privates\placement\PlacementController::class,'deleteBlock']);
 
+    Route::post('/set/exam/date',[\App\Http\Controllers\Api\privates\exam\ExamCourseController::class,'storeExamDate']);
+
+
 });
 
 //Protected
@@ -81,8 +84,12 @@ Route::prefix('college')->group(function () {
 
 
     Route::post('/get/block/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'getMyBlock']);
+    Route::get('/get/block/{id}',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'getBlockById']);
+
     Route::post('/use/block/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'useBlock']);
     Route::post('/used/block/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'usedBlock']);
+
+    Route::post('/use/room/',[ App\Http\Controllers\API\Privates\placement\PlacementController::class,'useRooms']);
 
 
 
@@ -110,6 +117,9 @@ Route::prefix('department')->group(function () {
     Route::post('login',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'login']);
     Route::post('complete_info',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'update']);
     Route::post('reset',[\App\Http\Controllers\API\Privates\department\DepartmentUserController::class,'reset']);
+
+    Route::get('all',[ App\Http\Controllers\API\Privates\department\departmentAccountController::class,'index']);
+
 
     Route::post('/edit/{id}',[\App\Http\Controllers\API\Privates\department\DepartmentAccountController::class,'update']);
     Route::post('/create-instructor',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'register']);
@@ -140,6 +150,11 @@ Route::prefix('department')->group(function () {
 
     Route::post('/courses',[\App\Http\Controllers\API\Privates\course\courseController::class,'getMyCourses']);
     Route::post('/course/create',[\App\Http\Controllers\API\Privates\course\courseController::class,'store']);
+    Route::post('/course/owner',[\App\Http\Controllers\API\Privates\course\courseController::class,'giveCourseOwnership']);
+
+    Route::post('/course/edit/{id}',[\App\Http\Controllers\API\Privates\course\courseController::class,'update']);
+    Route::post('/course/{id}/delete',[\App\Http\Controllers\API\Privates\course\courseController::class,'destroy']);
+
 
 
 

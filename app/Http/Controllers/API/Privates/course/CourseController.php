@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\privates\course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\CourseOWner;
 use App\Models\Department;
 use Exception;
 use Illuminate\Http\Request;
@@ -104,6 +105,25 @@ class CourseController extends Controller
         ],200);
     }
 
+    public function giveCourseOwnership(Request $request)
+    {
+        //
+        $Validated = $request->validate([
+            'course_id' => 'required',
+            'department_id' => 'required',
+        ]);
+        $course = CourseOWner::create([
+            'course_id' =>$Validated['course_id'],
+            'department_id' => $Validated['department_id'],
+        ]);
+
+        return response([
+            'course' =>$course,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -138,6 +158,17 @@ class CourseController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $Validated = $request->validate([
+            'course_title' => 'required',
+            'year' => 'required',
+            'course_code' => 'required',
+            'course_credit_hour' => 'required',
+            'course_has_lab' => 'required',
+            'course_has_lecture' => 'required',
+            'course_type' => 'required',
+            'course_department_id' => 'required',
+        ]);
+
         $course = Course::findOrFail($id);
 
         if(!$course){
@@ -146,14 +177,7 @@ class CourseController extends Controller
                 'Status' => 'OK'
             ],400);
         }
-        $Validated = $request->validate([
-            'course_title' => 'required',
-            'course_name' => 'required',
-            'course_credit_hour' => 'required',
-            'course_has_lab' => 'required',
-            'course_type' => 'required',
-            'course_department_id' => 'required',
-        ]);
+
 
         if(!$Validated){
             return response([
@@ -162,13 +186,22 @@ class CourseController extends Controller
             ],301);
         }
 
-        $isUpdated = $course->update($request->all());
+        $isUpdated = $course->update([
+            'course_title' => $Validated['course_title'],
+            'year' => $Validated['year'],
+            'course_code' =>$Validated['course_code'],
+            'course_credit_hour' =>$Validated['course_credit_hour'],
+            'course_has_lab' =>$Validated['course_has_lab'],
+            'course_has_lecture' =>$Validated['course_has_lecture'],
+            'course_type' =>$Validated['course_type'],
+            'course_department_id' => $Validated['course_department_id'],
+        ]);
 
         if($isUpdated){
             return response([
                 'Message' => 'UnSuccessful',
                 'Status' => 'OK'
-            ],201);
+            ],200);
         }
         return response([
             'Updated_DATA' =>$course,
@@ -192,7 +225,7 @@ class CourseController extends Controller
             return response([
                 'Message' => 'Course Not Found',
                 'Status' => 'OK'
-            ],400);
+            ],200);
         }
         Course::findOrFail($id)->delete();
         return response([

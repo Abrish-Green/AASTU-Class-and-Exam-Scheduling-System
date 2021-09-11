@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Block;
 use App\Models\Classes;
 use App\Models\CollegeBlock;
+use App\Models\CollegeBlockRooms;
 use App\Models\CustomRoom;
 use App\Models\LabRoom;
 use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\Array_;
 
 class PlacementController extends Controller
@@ -48,7 +50,44 @@ class PlacementController extends Controller
     }
     public function useBlock(Request $request){ //department
         try{
+
+            $check = CollegeBlock::where('block_id', $request->block_id)->get()->count();
+            if($check > 0){
+                return response([
+                    'Message' => 'Block Already exists',
+                    'Status' => 'OK'
+                ],200);
+
+            }
              $college_block = CollegeBlock::create([
+                'block_name' => $request->block_name,
+                'block_id' => $request->block_id,
+                'college_id' => $request->college_id
+                ]);
+
+            return response([
+                'college_block' =>  $college_block,
+                'Message' => 'Successful',
+                'Status' => 'OK'
+            ],200);
+
+        }catch(Exception $e){
+            return response([
+                'Message' => 'UnSuccessful',
+                'Status' => 'OK',
+                'Error'=> $e
+            ],200);
+        }
+
+    }
+
+    public function useRooms(Request $request){ //department
+        try{
+
+            $check = CollegeBlockRooms::where('block_id', $request->block_id)->get()->count();
+
+             $college_block = CollegeBlock::create([
+                'block_name' => $request->block_name,
                 'block_id' => $request->block_id,
                 'college_id' => $request->college_id
                 ]);
@@ -92,7 +131,6 @@ class PlacementController extends Controller
 
     public function getMyBlock(Request $request){
         $getmyblock = CollegeBlock::where('college_id',$request->college_id)->get();
-
         return response([
             'block' => $getmyblock,
             'Message' => 'Successful',
@@ -100,6 +138,16 @@ class PlacementController extends Controller
         ],200);
     }
 
+
+    public function getBlockById($id){
+        $block = Block::find($id)->get();
+
+        return response([
+            'block' => $block,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+    }
     public function index(Request $request){ //department
         $block = Block::all();
 

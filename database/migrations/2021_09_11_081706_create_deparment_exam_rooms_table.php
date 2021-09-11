@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCollegeBlocksTable extends Migration
+class CreateDeparmentExamRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateCollegeBlocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('college_blocks', function (Blueprint $table) {
+        Schema::create('department_exam_rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('block_name');
+            $table->bigInteger('room_id')->unsigned()->index();
             $table->bigInteger('block_id')->unsigned()->index();
-            $table->bigInteger('college_id')->unsigned()->index();
+            $table->bigInteger('department_id')->unsigned()->index();
+
             $table->timestamps();
             $table->foreign('block_id')->references('id')->on('blocks');
-            $table->foreign('college_id')->references('id')->on('colleges');
+            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
@@ -31,6 +33,6 @@ class CreateCollegeBlocksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('college_blocks');
+        Schema::dropIfExists('department_exam_rooms');
     }
 }
