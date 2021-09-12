@@ -16,16 +16,11 @@ class CreateTimeSlotDataTable extends Migration
 
         Schema::create('time_slot_data', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('timeslot_id')->unsigned()->index();
-            $table->bigInteger('room_id')->unsigned()->index();
-            $table->bigInteger('course_id')->unsigned()->index();
-            $table->bigInteger('instructor_id')->unsigned()->index();
+            $table->integer('timeslot_id');
+            $table->integer('room_id');
+            $table->integer('course_id');
+            $table->integer('instructor_id');
             $table->timestamps();
-
-            $table->foreign('timeslot_id')->references('id')->on('timeslots')->onDelete('cascade');
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
 
         });
     }

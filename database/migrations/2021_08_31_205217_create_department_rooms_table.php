@@ -15,15 +15,12 @@ class CreateDepartmentRoomsTable extends Migration
     {
         Schema::create('department_rooms', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('room_id')->unsigned()->index();
-            $table->bigInteger('block_id')->unsigned()->index();
-            $table->bigInteger('department_id')->unsigned()->index();
-            $table->bigInteger('college_id')->unsigned()->index();
+            $table->integer('room_id');
+            $table->integer('block_id');
+            $table->integer('department_id');
+            $table->integer('college_id');
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('rooms');
-            $table->foreign('block_id')->references('id')->on('blocks');
-            $table->foreign('department_id')->references('id')->on('departments');
-            $table->foreign('college_id')->references('id')->on('colleges');
+
         });
     }
 

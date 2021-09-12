@@ -16,10 +16,8 @@ class CreateCustomRoomsTable extends Migration
         Schema::create('custom_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('custom_name');
-            $table->bigInteger('department_id')->unsigned()->index();
+            $table->integer('department_id');
             $table->timestamps();
-
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
 
         });
     }

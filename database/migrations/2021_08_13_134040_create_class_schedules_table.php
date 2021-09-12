@@ -16,15 +16,12 @@ class CreateClassSchedulesTable extends Migration
 
         Schema::create('class_schedules', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('class_id')->unsigned()->index();
-            $table->bigInteger('year_id')->unsigned()->index();
+            $table->integer('class_id');
+            $table->integer('year_id');
             $table->integer('semester_id');
-            $table->bigInteger('day_id')->unsigned()->index();
+            $table->integer('day_id');
             $table->timestamps();
 
-            $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
-            $table->foreign('year_id')->references('id')->on('years')->onDelete('cascade');
-            $table->foreign('day_id')->references('id')->on('days')->onDelete('cascade');
 
         });
     }

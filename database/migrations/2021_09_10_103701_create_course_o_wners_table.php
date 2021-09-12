@@ -15,12 +15,9 @@ class CreateCourseOWnersTable extends Migration
     {
         Schema::create('course_o_wners', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('course_id')->unsigned()->index();
-            $table->bigInteger('department_id')->unsigned()->index();
+            $table->integer('course_id');
+            $table->integer('department_id');
             $table->timestamps();
-            $table->foreign('course_id')->references('id')->on('courses');
-            $table->foreign('department_id')->references('id')->on('departments');
-
 
         });
     }

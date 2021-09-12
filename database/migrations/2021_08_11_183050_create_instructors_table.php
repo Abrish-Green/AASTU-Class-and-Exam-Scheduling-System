@@ -19,11 +19,10 @@ class CreateInstructorsTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->boolean('active')->default(1);
-            $table->BigInteger('department_id')->unsigned()->index();
-            $table->BigInteger('link_to')->default(0);
+            $table->integer('department_id');
+            $table->integer('link_to')->default(0);
             $table->string('remember_token')->default('');
             $table->timestamps();
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
 
         });
     }

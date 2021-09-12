@@ -16,11 +16,10 @@ class CreateCollegeBlocksTable extends Migration
         Schema::create('college_blocks', function (Blueprint $table) {
             $table->id();
             $table->string('block_name');
-            $table->bigInteger('block_id')->unsigned()->index();
-            $table->bigInteger('college_id')->unsigned()->index();
+            $table->integer('block_id');
+            $table->integer('college_id');
             $table->timestamps();
-            $table->foreign('block_id')->references('id')->on('blocks');
-            $table->foreign('college_id')->references('id')->on('colleges');
+
         });
     }
 

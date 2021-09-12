@@ -16,10 +16,9 @@ class CreateLabRoomsTable extends Migration
         Schema::create('lab_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('lab_name');
-            $table->bigInteger('department_id')->unsigned()->index();
+            $table->integer('department_id');
             $table->timestamps();
 
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
     }
 

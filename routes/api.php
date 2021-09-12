@@ -174,8 +174,7 @@ Route::prefix('department')->group(function () {
 
 
 
-
-
+    Route::get('/exam',[\App\Http\Controllers\API\logic\exam\ExamScheduleController::class,'MakeFinalExamSchedule']);
 
 
 

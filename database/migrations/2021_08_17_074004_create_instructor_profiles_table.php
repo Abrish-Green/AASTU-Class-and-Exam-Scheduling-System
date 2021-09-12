@@ -15,18 +15,15 @@ class CreateInstructorProfilesTable extends Migration
     {
         Schema::create('instructor_profiles', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('instructor_id')->unsigned()->index();
-            $table->bigInteger('instructor_office_position_id')->unsigned()->index();
-            $table->bigInteger('instructor_taught_courses_id')->unsigned()->index();
+            $table->integer('instructor_id');
+            $table->integer('instructor_office_position_id');
+            $table->integer('instructor_taught_courses_id');
             $table->integer('semester');
             $table->integer('year');
-            $table->bigInteger('class_id')->unsigned()->index();
+            $table->integer('class_id');
             $table->timestamps();
 
-            $table->foreign('instructor_office_position_id')->references('id')->on('office_positions');
-            $table->foreign('instructor_taught_courses_id')->references('id')->on('courses');
-            $table->foreign('instructor_id')->references('id')->on('courses');
-            $table->foreign('class_id')->references('id')->on('courses');
+
         });
     }
 

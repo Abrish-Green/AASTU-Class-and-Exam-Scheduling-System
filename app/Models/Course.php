@@ -17,7 +17,7 @@ class Course extends Model
         'course_has_lab',
         'course_has_lecture',
         'course_type',
-        'course_department_id',
+        'department_id',
     ];
 
     public function instructor(){

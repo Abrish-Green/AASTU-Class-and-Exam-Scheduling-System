@@ -15,14 +15,12 @@ class CreateExamPlacementsTable extends Migration
     {
         Schema::create('exam_placements', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('section_id')->unsigned()->index();
-            $table->bigInteger('block_id')->unsigned()->index();
-            $table->bigInteger('room_id')->unsigned()->index();
+            $table->integer('section_id');
+            $table->integer('block_id');
+            $table->integer('room_id');
             $table->timestamps();
 
-            $table->foreign('section_id')->references('id')->on('exam_class_sections');
-            $table->foreign('block_id')->references('id')->on('blocks');
-            $table->foreign('room_id')->references('id')->on('rooms');
+
         });
     }
 

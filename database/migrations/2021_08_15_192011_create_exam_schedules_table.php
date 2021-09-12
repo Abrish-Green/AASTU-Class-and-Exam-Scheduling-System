@@ -21,12 +21,9 @@ class CreateExamSchedulesTable extends Migration
             $table->date('exam_date');
             $table->string('exam_day_name');
             $table->integer('year');
-            $table->bigInteger('section_id')->unsigned()->index();
+            $table->integer('section_id');
             $table->string('exam_room');
             $table->timestamps();
-
-            $table->foreign('section_id')->references('id')->on('exam_class_sections')->onDelete('cascade');
-
         });
     }
 

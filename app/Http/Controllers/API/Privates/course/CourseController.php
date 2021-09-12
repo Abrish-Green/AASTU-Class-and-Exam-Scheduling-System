@@ -74,7 +74,7 @@ class CourseController extends Controller
             'course_has_lab' => 'required',
             'course_has_lecture' => 'required',
             'course_type' => 'required',
-            'course_department_id' => 'required',
+            'department_id' => 'required',
         ]);
 
         $didCourseExist = Course::where('course_code', $Validated['course_code'])->get();
@@ -95,7 +95,7 @@ class CourseController extends Controller
             'course_has_lab' =>$Validated['course_has_lab'],
             'course_has_lecture' =>$Validated['course_has_lecture'],
             'course_type' =>$Validated['course_type'],
-            'course_department_id' => $Validated['course_department_id'],
+            'department_id' => $Validated['department_id'],
         ]);
 
         return response([

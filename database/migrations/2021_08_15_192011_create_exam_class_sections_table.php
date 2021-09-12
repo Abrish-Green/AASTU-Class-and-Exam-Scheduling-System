@@ -17,11 +17,10 @@ class CreateExamClassSectionsTable extends Migration
             $table->id();
             $table->string('class_name');
             $table->integer('year');
-            $table->integer('semester')->unsigned()->index();
-            $table->bigInteger('department_id')->unsigned()->index();
+            $table->integer('semester');
+            $table->integer('department_id');
             $table->timestamps();
 
-            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 

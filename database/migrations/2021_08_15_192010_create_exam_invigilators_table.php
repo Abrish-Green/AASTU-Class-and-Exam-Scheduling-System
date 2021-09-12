@@ -17,11 +17,8 @@ class CreateExamInvigilatorsTable extends Migration
             $table->id();
             $table->string('invigilator_name');
             $table->boolean('active')->default(1);
-            $table->bigInteger('department_id')->unsigned()->index();
+            $table->integer('department_id');
             $table->timestamps();
-
-            $table->foreign('department_id')->references('id')->on('departments');
-
 
 
         });

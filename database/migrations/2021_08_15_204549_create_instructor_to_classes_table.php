@@ -15,12 +15,10 @@ class CreateInstructorToClassesTable extends Migration
     {
         Schema::create('instructor_to_classes', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('class_id')->unsigned()->index();
-            $table->bigInteger('instructor_to_course_id')->unsigned()->index();
+            $table->integer('class_id');
+            $table->integer('instructor_to_course_id');
             $table->timestamps();
 
-            $table->foreign('class_id')->references('id')->on('classes');
-            $table->foreign('instructor_to_course_id')->references('id')->on('instructor_to_courses');
         });
     }
 
