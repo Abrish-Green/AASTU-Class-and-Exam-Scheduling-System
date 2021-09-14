@@ -31,11 +31,11 @@ class CourseController extends Controller
     public function getMyCourses(Request $request)
     {
         //
-        $course = Course::where('course_department_id', $request->course_department_id)->get();
+        $course = Course::where('department_id', $request->department_id)->get();
 
 
         try{
-        if(Department::findOrFail($request->course_department_id)->count() == 0){
+        if(Department::findOrFail($request->department_id)->count() == 0){
             return response([
                 'Message' => 'Department Not Found',
                 'Status' => 'OK'
@@ -48,7 +48,7 @@ class CourseController extends Controller
         ],200);
         }catch(Exception $e){
             return response([
-
+                'ERROR'=> $e,
                 'Message' => 'Successful',
                 'Status' => 'Fail'
             ],200);
@@ -166,7 +166,7 @@ class CourseController extends Controller
             'course_has_lab' => 'required',
             'course_has_lecture' => 'required',
             'course_type' => 'required',
-            'course_department_id' => 'required',
+            'department_id' => 'required',
         ]);
 
         $course = Course::findOrFail($id);
@@ -194,7 +194,7 @@ class CourseController extends Controller
             'course_has_lab' =>$Validated['course_has_lab'],
             'course_has_lecture' =>$Validated['course_has_lecture'],
             'course_type' =>$Validated['course_type'],
-            'course_department_id' => $Validated['course_department_id'],
+            'department_id' => $Validated['department_id'],
         ]);
 
         if($isUpdated){

@@ -17,7 +17,6 @@ class CreateExamCoursesTable extends Migration
             $table->id();
             $table->integer('course_id');
             $table->integer('course_year');
-            $table->date('year');
             $table->integer('semester');
             $table->integer('department_id');
             $table->timestamps();

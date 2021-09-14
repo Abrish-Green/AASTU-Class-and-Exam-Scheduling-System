@@ -20,7 +20,19 @@ class ExamCourseController extends Controller
         $ExamCourse = ExamCourses::all();
 
         return response([
-            'CREATED_DATA' =>$ExamCourse,
+            'exam_course' =>$ExamCourse,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
+    }
+    public function getMyExamCourse(Request $request)
+    {
+        //
+        $ExamCourse = ExamCourses::where('department_id', $request->department_id)->get();
+
+        return response([
+            'exam_course' =>$ExamCourse,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);
@@ -40,7 +52,6 @@ class ExamCourseController extends Controller
             'course_id' => 'required',
             'department_id'=> 'required',
             'course_year'=> 'required',
-            'year'=> 'required',
             'semester'=> 'required',
         ]);
 
@@ -48,12 +59,11 @@ class ExamCourseController extends Controller
             'course_id' => $Validated['course_id'],
             'department_id' =>$Validated['department_id'],
             'course_year' =>$Validated['course_year'],
-            'year' =>$Validated['year'],
             'semester' =>$Validated['semester'],
         ]);
 
         return response([
-            'CREATED_DATA' =>$Examcourse,
+            'exam_course' =>$Examcourse,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);
@@ -112,7 +122,7 @@ class ExamCourseController extends Controller
             ],200);
         }
         return response([
-            'CREATED_DATA' =>$Examcourse,
+            'CREATED_DATA' =>$ExamCourse,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);

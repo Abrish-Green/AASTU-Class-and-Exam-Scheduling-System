@@ -152,6 +152,12 @@ Route::prefix('department')->group(function () {
     Route::post('/course/create',[\App\Http\Controllers\API\Privates\course\courseController::class,'store']);
     Route::post('/course/owner',[\App\Http\Controllers\API\Privates\course\courseController::class,'giveCourseOwnership']);
 
+    Route::post('/create/exam/course/',[\App\Http\Controllers\API\Privates\exam\ExamCourseController::class,'store']);
+    Route::post('/get/exam/courses/',[\App\Http\Controllers\API\Privates\exam\ExamCourseController::class,'getMyExamCourse']);
+
+
+
+
     Route::post('/course/edit/{id}',[\App\Http\Controllers\API\Privates\course\courseController::class,'update']);
     Route::post('/course/{id}/delete',[\App\Http\Controllers\API\Privates\course\courseController::class,'destroy']);
 

@@ -13,7 +13,6 @@ class ExamCourses extends Model
         'course_id',
         'department_id',
         'course_year',
-        'year',
         'semester',
     ];
 
