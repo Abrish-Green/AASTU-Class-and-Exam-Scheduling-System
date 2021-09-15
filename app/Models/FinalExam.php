@@ -26,6 +26,7 @@ class FinalExam extends Model
         'class_name',
         'invigilator_2',
         'college_name',
+        'department_name',
         'year'
 
     ];

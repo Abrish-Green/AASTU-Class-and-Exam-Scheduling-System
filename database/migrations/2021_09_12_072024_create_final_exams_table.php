@@ -31,6 +31,7 @@ class CreateFinalExamsTable extends Migration
             $table->string('class_name');
             $table->string('invigilator_2');
             $table->string('college_name');
+            $table->string('department_name');
             $table->integer('year');
 
             $table->timestamps();

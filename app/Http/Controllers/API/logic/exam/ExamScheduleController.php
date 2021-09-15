@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\Department;
 use App\Models\ExamClassSection;
 use App\Models\ExamCourses;
+use App\Models\ExamInvigilator;
 use App\Models\ExamSetting;
 use App\Models\FinalExam;
 use DateTime;
@@ -43,15 +44,16 @@ class ExamScheduleController extends Controller
         $EveryFinalExam = FinalExam::all();
         $year = array(1,2,3,4,5,6);
         $result = array();
-        $session_for_exam = array([
-                'common_course'=> '8:30 AM (Morning)',
-                '1'=>'8:30 AM (Morning)
-                ','2'=>'8:30 AM (Morning)
-                ','3'=>'7:30PM (Afternoon)
-                ','4'=>'8:30 AM (Morning)
-                ','5'=>'7:30PM (Afternoon)
-                ','6'=>'8:30 AM (Morning)
-                ']);
+        $Invigilators = array();
+        $session_for_exam = array(
+                'null',
+                '8:30 AM (Morning)',
+                '8:30 AM (Morning)',
+                '7:30PM (Afternoon)',
+                '8:30 AM (Morning)',
+                '7:30PM (Afternoon)',
+                '8:30 AM (Morning)'
+            );
         foreach ($EverySection as $section) {  //holds section
 
             //create table of final_exams
@@ -132,11 +134,12 @@ class ExamScheduleController extends Controller
                             }else{
                                 echo $j.'-Day '.date("l", $real ).$exam_day_counter . '<br />';
 
+
                                 $finalExam = FinalExam::create([
                                     'flag' => true ,
                                     'course_id' => 1,
                                     'invigilator_1'=> '',
-                                    'session'=> '',
+                                    'session'=> $session_for_exam[$section->year],
                                     'room' => '',
                                     'block'=> '',
                                     'exam_date'=> date("F jS", $real),
@@ -149,6 +152,7 @@ class ExamScheduleController extends Controller
                                     'class_name'=> $section->class_name,
                                     'invigilator_2'=> '',
                                     'college_name' => $college_name,
+                                    'department_name' =>  $department_name,
                                     'year'=> $section->year
 
                             ]);
@@ -177,7 +181,7 @@ class ExamScheduleController extends Controller
                                         'flag' => true ,
                                         'course_id' => 1,
                                         'invigilator_1'=> '',
-                                        'session'=> '',
+                                        'session'=> $session_for_exam[$section->year],
                                         'room' => '',
                                         'block'=> '',
                                         'exam_date'=> date("F jS", $real),
@@ -190,6 +194,7 @@ class ExamScheduleController extends Controller
                                         'class_name'=> $section->class_name,
                                         'invigilator_2'=> '',
                                         'college_name' => $college_name,
+                                        'department_name' =>  $department_name,
                                         'year'=> $section->year
 
                                 ]);
@@ -203,7 +208,7 @@ class ExamScheduleController extends Controller
                                         'flag' => true ,
                                         'course_id' => 1,
                                         'invigilator_1'=> '',
-                                        'session'=> '',
+                                        'session'=> $session_for_exam[$section->year],
                                         'room' => '',
                                         'block'=> '',
                                         'exam_date'=> date("F jS", $real),
@@ -216,6 +221,7 @@ class ExamScheduleController extends Controller
                                         'class_name'=> $section->class_name,
                                         'invigilator_2'=> '',
                                         'college_name' => $college_name,
+                                        'department_name' =>  $department_name,
                                         'year'=> $section->year
 
                                 ]);
@@ -231,7 +237,7 @@ class ExamScheduleController extends Controller
                                         'flag' => true ,
                                         'course_id' => 1,
                                         'invigilator_1'=> '',
-                                        'session'=> '',
+                                        'session'=> $session_for_exam[$section->year],
                                         'room' => '',
                                         'block'=> '',
                                         'exam_date'=> date("F jS", $real),
@@ -244,6 +250,7 @@ class ExamScheduleController extends Controller
                                         'class_name'=> $section->class_name,
                                         'invigilator_2'=> '',
                                         'college_name' => $college_name,
+                                        'department_name' =>  $department_name,
                                         'year'=> $section->year
 
                                 ]);
@@ -274,16 +281,7 @@ class ExamScheduleController extends Controller
               //echo "DAY - " . $exam_day_counter . '<br />';
               $exam_day_counter++;
             }
-        }else{
-            //echo "Already Exists ". 'Year - '.$section->year. ' Section -'.$section->class_name . ' - <br /> ';
-
-
-
-
-
-
-
-        }
+         }
 
 
     }
@@ -340,17 +338,166 @@ class ExamScheduleController extends Controller
 
 
 
+    foreach ($EverySection as $sections) {
+
+        $finalExamRow = FinalExam::where('class_id',$sections->id)
+                                    ->where('class_name',$sections->class_name)
+                                    ->get();
+        $Invigilator_tbl =  ExamInvigilator::where('department_id', $sections->department_id)
+                                    ->get();
 
 
-}
+        foreach ($Invigilator_tbl as $key => $invigilator) {
+            if(!in_array($invigilator->invigilator_name,$Invigilators)){
+                array_push($Invigilators,$invigilator->invigilator_name);
+            }
 
-}
+
+        }
 
 
+            $inv1_counter = 0;
+            $inv1 = 0;
+            $inv2_counter = 0;
+            $inv2=0;
+            foreach ($Invigilator_tbl as $key => $invigilator) {
+
+
+                $prev1 = -2;
+                $prev2 = -2;
+
+                foreach ($finalExamRow as $row) {
+
+                    echo "<br />";
+                    echo "<br />";
+
+                    //echo "Year - " . $row->year;
+
+                    //echo " Section - " . $row->class_name;
+
+
+                    if(!$row->invigilator_1 || !$row->invigilator_2){
+
+
+
+
+                        $random_number_for_invigilator_1 = random_int(0,count($Invigilators)-1);
+                        $random_number_for_invigilator_2 = random_int(0,count($Invigilators)-1);
+
+
+                        //previous will not be repeated
+                        if($prev1 == $random_number_for_invigilator_1 ){
+                            $random_number_for_invigilator_1 = random_int(0,count($Invigilators)-1);
+                        }
+                        if($prev2 == $random_number_for_invigilator_2 ){
+                            $random_number_for_invigilator_2 = random_int(0,count($Invigilators)-1);
+                        }
+
+
+                        if($random_number_for_invigilator_1 == $random_number_for_invigilator_2){
+                            if($random_number_for_invigilator_2 == 0){
+                                $random_number_for_invigilator_2+=1;
+                            }else{
+                                $random_number_for_invigilator_2-=1;
+                            }
+
+                        }
+
+                        echo "Inv1- $Invigilators[$random_number_for_invigilator_1] <br /> Inv-2  : $Invigilators[$random_number_for_invigilator_2]";
+
+
+                        $invigilator_1=$Invigilators[$random_number_for_invigilator_1];
+                        $invigilator_2=$Invigilators[$random_number_for_invigilator_2];
+
+
+                            $checkColision = FinalExam::where('exam_date', $row->exam_date)
+                                                        ->where('course_code',$row->course_code)
+                                                        ->where('department_id',$row->department_id)
+                                                        ->where('year',$row->year)
+                                                        ->get();
+
+                            if($checkColision->count() > 0 ){
+                                foreach ($checkColision as $sameSection) {
+                                    if($sameSection->invigilator_1 == $invigilator_1 && $sameSection->invigilator_1 != $invigilator_2 ){
+                                        $temp = $invigilator_1 ;
+                                        $invigilator_1 = $invigilator_2;
+                                        $invigilator_2= $temp;
+
+                                        if($sameSection->invigilator_2 == $invigilator_2 ){
+                                            if($random_number_for_invigilator_2 ==0){
+                                                $invigilator_2=$Invigilators[$random_number_for_invigilator_2+1];
+                                            }else{
+                                                $invigilator_2=$Invigilators[$random_number_for_invigilator_2-1];
+                                            }
+                                        }
+                                    }
+                                    if($sameSection->invigilator_2 == $invigilator_2 && $sameSection->invigilator_2 != $invigilator_1 ){
+                                        $temp = $invigilator_2 ;
+                                        $invigilator_2 = $invigilator_1;
+                                        $invigilator_1= $temp;
+
+                                        if($sameSection->invigilator_1 == $invigilator_1 ){
+                                            if($random_number_for_invigilator_1 ==0){
+                                                $invigilator_1=$Invigilators[$random_number_for_invigilator_1+1];
+                                            }else{
+                                                $invigilator_1=$Invigilators[$random_number_for_invigilator_1-1];
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            $row->update([
+                                'invigilator_1' => $invigilator_1 ,
+                                'invigilator_2' => $invigilator_2
+                            ]);
+
+
+
+
+
+                            $prev1 = $random_number_for_invigilator_1;
+                            $prev2 = $random_number_for_invigilator_2;
+
+                    }
+
+
+
+                }
+
+
+
+            }
+
+
+
+        }
+
+    }
 
 
 /**
  *
  *
  *
+ *
+
+                    // $Invigilator_1 should contain only 3 repeat of on invigilator
+                    if($Invigilator_count_1 >= 4){
+                        break;
+                    }
+                    $Invigilator_count_2 =  FinalExam::where('class_id',$sections->id)
+                                             ->where('class_name',$sections->class_name)
+                                             ->where('invigilator_2',$invigilator->invigilator_name)
+                                             ->count();
+                    // $Invigilator_2 should contain only 3 repeat of on invigilator
+                    if( $Invigilator_count_2 >=3 ){
+                        break;
+                    }
+
  */
+
+}
+
+
