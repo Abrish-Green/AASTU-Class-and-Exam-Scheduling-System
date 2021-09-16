@@ -20,3 +20,8 @@ Route::get('/', function () {
 Route::get('/exam',[\App\Http\Controllers\API\logic\exam\ExamScheduleController::class,'MakeFinalExamSchedule']);
 
 Route::get('/room',[\App\Http\Controllers\API\logic\exam\ExamScheduleController::class,'AssignRoom']);
+
+
+Route::get('/class',[\App\Http\Controllers\API\logic\class\ClassScheduleController::class,'MakeClassSchedule']);
+
+Route::get('/sas',[\App\Http\Controllers\API\logic\exam\ExamScheduleController::class,'AssignRoom']);

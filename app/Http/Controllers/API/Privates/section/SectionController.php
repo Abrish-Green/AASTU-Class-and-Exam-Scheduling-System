@@ -15,6 +15,10 @@ class SectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+
     public function index()
     {
         //
@@ -78,6 +82,44 @@ class SectionController extends Controller
        }
 
     }
+
+
+    public function getMySectionForPublic(Request $request){
+
+        $section = Classes::where('year',$request->year)
+                        ->where('semester',$request->semester)
+                        ->where('department_id',$request->department_id)
+                        ->get();
+
+
+        if($section->count() > 0){
+
+            return response([
+                'section' => $section
+            ],200);
+        }else{
+            return response([
+                'Message' => 'Fail'
+            ],200);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function create_exam_section(Request $request)
     {
         //

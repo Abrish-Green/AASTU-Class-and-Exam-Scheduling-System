@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\privates\exam;
 use App\Http\Controllers\Controller;
 use App\Models\ExamCourses;
 use App\Models\ExamSetting;
+use App\Models\FinalExam;
 use Illuminate\Http\Request;
 
 class ExamCourseController extends Controller
@@ -14,6 +15,62 @@ class ExamCourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+
+
+    //get exam schedule
+
+
+    public function getFinalExamSchedule(Request $request){
+        $Validated = $request->validate([
+            'college_id' => 'required',
+            'department_id'=> 'required',
+            'semester'=> 'required',
+            'year'=> 'required',
+            'section'=> 'required',
+        ]);
+
+        $FinalExamSchedule = FinalExam::where('college_id', $Validated['college_id'])
+                                       ->where('department_id',$Validated['department_id'])
+                                       ->where('semester',$Validated['semester'])
+                                       ->where('year',$Validated['year'])
+                                       ->where('class_name',$Validated['section'])
+                                       ->get();
+
+
+        if($FinalExamSchedule->count()> 0){
+            return response([
+                'Message' => 'Exam Schedule Found',
+                'exam_schedule' => $FinalExamSchedule
+            ],200);
+        }else{
+            return response([
+                'Message' => 'Exam Schedule Not Found'
+            ],200);
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function index()
     {
         //

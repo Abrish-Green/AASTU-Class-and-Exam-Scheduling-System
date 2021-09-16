@@ -23,6 +23,16 @@ class DepartmentAccountController extends Controller
             'department' => $department
         ],200);
     }
+
+    public function getDepartmentForPublic(Request $request){
+
+        $department = Department::where('college_id', $request->college_id)->get();
+        return response([
+            'department' => $department
+        ],200);
+
+
+    }
     /**
      * Store a newly created resource in storage.
      *

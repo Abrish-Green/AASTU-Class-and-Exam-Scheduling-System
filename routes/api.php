@@ -22,6 +22,20 @@ use Illuminate\Support\Facades\Route;
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+//EXAM FREE PORT
+Route::post('/users/get/exam/schedule',[\App\Http\Controllers\API\privates\exam\ExamCourseController::class,'getFinalExamSchedule']);
+Route::get('/users/get/colleges',[\App\Http\Controllers\API\privates\college\CollegeAccountController::class,'index']);
+Route::post('/users/get/departments',[\App\Http\Controllers\API\privates\department\DepartmentAccountController::class,'getDepartmentForPublic']);
+Route::post('/users/get/sections',[\App\Http\Controllers\API\privates\section\SectionController::class,'getMySectionForPublic']);
+
+
+
+
 Route::prefix('registrar')->middleware(['cors'])->group(function () {
     Route::post('sign-up',[\App\Http\Controllers\API\Admin\AdminController::class,'register']);
     Route::post('login',[\App\Http\Controllers\API\Admin\AdminController::class,'login']);

@@ -98,7 +98,7 @@ class ExamScheduleController extends Controller
 
     public function MakeFinalExamSchedule(){
 
-        $semester = 1;
+        $semester = 1;  //should be parameter
         $EverySection = ExamClassSection::all();
         $EveryExamCourse = ExamCourses::all();
         $EveryFinalExam = FinalExam::all();
@@ -213,7 +213,8 @@ class ExamScheduleController extends Controller
                                     'invigilator_2'=> '',
                                     'college_name' => $college_name,
                                     'department_name' =>  $department_name,
-                                    'year'=> $section->year
+                                    'year'=> $section->year,
+                                    'semester'=> $section->semester
 
                             ]);
 
@@ -255,7 +256,8 @@ class ExamScheduleController extends Controller
                                         'invigilator_2'=> '',
                                         'college_name' => $college_name,
                                         'department_name' =>  $department_name,
-                                        'year'=> $section->year
+                                        'year'=> $section->year,
+                                        'semester'=>$section->semester
 
                                 ]);
                                 $tempExamDay+=$ExamDaySpace;
@@ -282,7 +284,8 @@ class ExamScheduleController extends Controller
                                         'invigilator_2'=> '',
                                         'college_name' => $college_name,
                                         'department_name' =>  $department_name,
-                                        'year'=> $section->year
+                                        'year'=> $section->year,
+                                        'semester'=> $section->semester
 
                                 ]);
                                 $tempExamDay+=$ExamDaySpace;
@@ -311,7 +314,8 @@ class ExamScheduleController extends Controller
                                         'invigilator_2'=> '',
                                         'college_name' => $college_name,
                                         'department_name' =>  $department_name,
-                                        'year'=> $section->year
+                                        'year'=> $section->year,
+                                        'semester' => $section->semester
 
                                 ]);
 
@@ -577,6 +581,10 @@ class ExamScheduleController extends Controller
 
 
         //end
+        return response([
+            'Message' => 'Successfully Generated',
+            'Status' => 'OK'
+        ],200);
     }
 
 
