@@ -7,6 +7,7 @@ use App\Models\Classes;
 use App\Models\College;
 use App\Models\Course;
 use App\Models\Department;
+use App\Models\ExamBlockRoom;
 use App\Models\ExamClassSection;
 use App\Models\ExamCourses;
 use App\Models\ExamInvigilator;
@@ -35,6 +36,65 @@ class ExamScheduleController extends Controller
 
 
     //Implementation
+
+
+
+    public function AssignRoom(){
+
+        $EverySection = ExamClassSection::all();
+        $EveryExamCourse = ExamCourses::all();
+        $EveryFinalExam = FinalExam::all();
+
+
+
+        foreach ($EverySection as $section) {
+
+            $yearRoom = ExamBlockRoom::where('year',$section->year)->where('department_id',$section->department_id)->get();
+            echo "Year $section->year $section->class_name<br />";
+            if($yearRoom->count() > 0){
+                foreach ($yearRoom as $roomRow) {
+                        echo "ROW - $roomRow <br />";
+
+                        echo "Assign Block-$roomRow->block ,Room - $roomRow->room<br />";
+
+
+                        $check = FinalExam::where('block',$roomRow->block)
+                                   ->where('room',$roomRow->room)->get();
+
+                            if($check->count() > 0){
+
+                            }else{
+                                FinalExam::where('class_id',$section->id)->update([
+                                    'block' => $roomRow->block,
+                                    'room' => $roomRow->room
+                                ]);
+                            }
+
+
+
+
+                }
+                echo "<br />";
+
+            }
+        }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function MakeFinalExamSchedule(){
 
@@ -474,29 +534,53 @@ class ExamScheduleController extends Controller
 
         }
 
+
+
+        //assign room
+
+        foreach ($EverySection as $section) {
+
+            $yearRoom = ExamBlockRoom::where('year',$section->year)->where('department_id',$section->department_id)->get();
+            echo "Year $section->year $section->class_name<br />";
+            if($yearRoom->count() > 0){
+                foreach ($yearRoom as $roomRow) {
+                        echo "ROW - $roomRow <br />";
+
+                        echo "Assign Block-$roomRow->block ,Room - $roomRow->room<br />";
+
+
+                        $check = FinalExam::where('block',$roomRow->block)
+                                   ->where('room',$roomRow->room)->get();
+
+                            if($check->count() > 0){
+
+                            }else{
+                                FinalExam::where('class_id',$section->id)->update([
+                                    'block' => $roomRow->block,
+                                    'room' => $roomRow->room
+                                ]);
+
+                            }
+
+
+
+
+                }
+                echo "<br />";
+
+            }
+        }
+
+
+
+
+
+
+        //end
     }
 
 
-/**
- *
- *
- *
- *
 
-                    // $Invigilator_1 should contain only 3 repeat of on invigilator
-                    if($Invigilator_count_1 >= 4){
-                        break;
-                    }
-                    $Invigilator_count_2 =  FinalExam::where('class_id',$sections->id)
-                                             ->where('class_name',$sections->class_name)
-                                             ->where('invigilator_2',$invigilator->invigilator_name)
-                                             ->count();
-                    // $Invigilator_2 should contain only 3 repeat of on invigilator
-                    if( $Invigilator_count_2 >=3 ){
-                        break;
-                    }
-
- */
 
 }
 

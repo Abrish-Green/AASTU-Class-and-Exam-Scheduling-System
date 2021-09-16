@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\privates\exam;
 
 use App\Http\Controllers\Controller;
+use App\Models\ExamBlockRoom;
 use App\Models\ExamPlacement;
 use Illuminate\Http\Request;
 
@@ -34,20 +35,23 @@ class ExamRoomController extends Controller
     public function store(Request $request)
     {
         //
+
         $Validated = $request->validate([
-            'section_id' =>'required',
-            'block_id'=>'required',
-            'room_id'=>'required'
+            'room' =>'required',
+            'block'=>'required',
+            'year'=>'required',
+            'department_id'=>'required'
         ]);
 
-        $ExamRoom = ExamPlacement::create([
-            'section_id' => $Validated['section_id'],
-            'block_id' =>$Validated['block_id'],
-            'room_id' =>$Validated['room_id'],
+        $ExamRoom = ExamBlockRoom::create([
+            'room' => $Validated['room'],
+            'block' =>$Validated['block'],
+            'year' =>$Validated['year'],
+            'department_id' =>$Validated['department_id']
         ]);
 
         return response([
-            'CREATED_DATA' =>$ExamRoom,
+            'room' =>$ExamRoom,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);
@@ -59,10 +63,11 @@ class ExamRoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getMyExamRooms(Request $request)
     {
         //
-        $ExamRoom = ExamPlacement::findOrFail($id);
+        $ExamRoom = ExamBlockRoom::where('department_id',$request->department_id)
+                                  ->get();
 
         if(!$ExamRoom){
             return response([
@@ -71,7 +76,7 @@ class ExamRoomController extends Controller
             ],200);
         }
         return response([
-            'CREATED_DATA' =>$ExamRoom,
+            'room' =>$ExamRoom,
             'Message' => 'Successful',
             'Status' => 'OK'
         ],200);

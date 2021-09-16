@@ -156,6 +156,10 @@ Route::prefix('department')->group(function () {
     Route::post('/get/exam/courses/',[\App\Http\Controllers\API\Privates\exam\ExamCourseController::class,'getMyExamCourse']);
 
 
+    Route::post('/create/exam/room/',[\App\Http\Controllers\API\Privates\exam\ExamRoomController::class,'store']);
+    Route::post('/get/exam/room/',[\App\Http\Controllers\API\Privates\exam\ExamRoomController::class,'getMyExamRooms']);
+
+
 
 
     Route::post('/course/edit/{id}',[\App\Http\Controllers\API\Privates\course\courseController::class,'update']);
