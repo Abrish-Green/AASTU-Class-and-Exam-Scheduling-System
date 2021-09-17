@@ -48,6 +48,11 @@ class ClassScheduleController extends Controller
             $college_name = Department::findOrFail($department_id)->colleges->name;
 
 
+
+            if(FinalClassSchedule::where('class_id',$sections->id)->count() > 0){
+                continue;
+            }
+
             //echo "<br /> $sections  <br />";
 
             for($i=1;$i<=5;$i++){
@@ -101,15 +106,207 @@ class ClassScheduleController extends Controller
 
         //Assign Course
 
-        $prevCourse = '';
-        $courses_used = '';
-        $random = '';
-    foreach ($EverySection as $section) {
+        $courseArray = array();
+        foreach ($EverySection as $sections) {
+
+
+            $EveryYearCourse = Course::where('year',$sections->year)
+                                        ->where('department_id',$sections->department_id)->get();
+            $courseAmount =  $EveryYearCourse->count();
+                echo  "$sections->year $sections->class_name - course Amount -  $courseAmount<br />";
+
+            //generate course amount size number of string
+
+            $courses = array();
+            foreach ($EveryYearCourse as $key => $course) {
+                array_push($courses,$course);
+            }
+
+            $courseList = array();
+            for($i=0;$i<$courseAmount;$i++){
+                array_push($courseList,$i);
+            }
+
+                // Shuffle numbers
+                shuffle($courseList);
+                print_r($courseList);
+                echo "<br />";
+                foreach ($EveryYearCourse as $key => $section) {
+                   echo "--------------------key - $key ---$section->course_title <br>";
+
+                    $FinalClassSchedule = FinalClassSchedule::where('class_id',$sections->id)
+                                                            ->where('day',$DayName[$key])
+                                                            ->where('class_name',$sections->class_name)
+
+                                                            ->get();
+
+
+
+                    foreach($FinalClassSchedule as $row){
+
+
+
+                        if($key == ($courseAmount-1)){
+                            $key;
+                        }else{
+                            $key =  $key;
+                        }
+
+
+
+                        if($row->day == $DayName[$key]){
+                            $temp = $courseList[$key];
+                            echo "Day ". $row->day. $courses[$temp]->course_title .  "<br>";
+
+                        $CheckFinalClassScheduleExists = FinalClassSchedule::where('class_id',$sections->id)
+                            ->where('day',$DayName[$key])
+                            ->where('class_name',$sections->class_name)
+                            ->where('session','2:30 - 3:20')
+                            ->where('course_id',$courses[$temp]->id)
+                            ->get()->count();
+
+
+
+                            if($CheckFinalClassScheduleExists == 0){
+
+                            $CheckFinalClassSchedule = FinalClassSchedule::where('class_id',$sections->id)
+                            ->where('day',$DayName[$key])
+                            ->where('class_name',$sections->class_name)
+                            ->where('session','2:30 - 3:20')
+                            ->where('course_id',$courses[$temp]->id)
+                            ->get();
+                    if($CheckFinalClassSchedule->count() > 0){
+                        break;
+                    }
+
+                FinalClassSchedule::where('class_id',$sections->id)
+                ->where('class_name',$sections->class_name)
+                ->where('day',$DayName[$key])
+                                        ->where('session','2:30 - 3:20')
+                                        ->update([
+                                                'course_id' => $courses[$temp]->id,
+                                                'course_title' => $courses[$temp]->course_title,
+                                                'course_code' =>$courses[$temp]->course_code,
+                                                'course_credit_hour' => $courses[$temp]->course_credit_hour,
+
+
+                    ]);
+                FinalClassSchedule::where('class_id',$sections->id)
+                ->where('class_name',$sections->class_name)
+                ->where('day',$DayName[$key])
+                                        ->where('session','3:30 - 4:20')
+                                        ->update([
+                                                'course_id' => $courses[$temp]->id,
+                                                'course_title' => $courses[$temp]->course_title,
+                                                'course_code' =>$courses[$temp]->course_code,
+                                                'course_credit_hour' => $courses[$temp]->course_credit_hour,
+
+
+                    ]);
+
+
+                if($courses[$temp]->course_has_lab){
+                    ///echo "Has LAB<BR />";
+                    FinalClassSchedule::where('class_id',$sections->id)
+                    ->where('class_name',$sections->class_name)
+                    ->where('day',$DayName[$key])
+                                        ->where('session','7:30 - 8:20')
+                                        ->update([
+                                                'course_id' => $courses[$temp]->id,
+                                                'course_title' => $courses[$temp]->course_title . "(LAB)",
+                                                'course_code' =>$courses[$temp]->course_code,
+                                                'course_credit_hour' => $courses[$temp]->course_credit_hour,
+                                                'has_lab' => true
+
+                    ]);
+                    FinalClassSchedule::where('class_id',$sections->id)
+                    ->where('class_name',$sections->class_name)
+                    ->where('session','8:30 - 9:20')
+                    ->where('day',$DayName[$key])
+                    ->update([
+                            'course_id' => $courses[$temp]->id,
+                            'course_title' => $courses[$temp]->course_title . "(LAB)",
+                            'course_code' =>$courses[$temp]->course_code,
+                            'course_credit_hour' => $courses[$temp]->course_credit_hour,
+                            'has_lab' => true
+
+]);
+                FinalClassSchedule::where('class_id',$sections->id)
+                                ->where('class_name',$sections->class_name)
+                                ->where('day',$DayName[$key])
+                                ->where('session','9:30 - 10:20')
+                                ->update([
+                                        'course_id' => $courses[$temp]->id,
+                                        'course_title' => $courses[$temp]->course_title . "(LAB)",
+                                        'course_code' =>$courses[$temp]->course_code,
+                                        'course_credit_hour' => $courses[$temp]->course_credit_hour,
+                                        'has_lab' => true
+
+                    ]);
+
+
+                }
+
+
+                            }
 
 
 
 
-        }//end of foreach
+                        }else{
+                            $temp = $courseList[$key];
+                            $CheckFinalClassSchedule = FinalClassSchedule::where('class_id',$sections->id)
+                            ->where('day',$DayName[$key])
+                            ->where('class_name',$sections->class_name)
+                            ->where('session','2:30 - 3:20')
+                            ->where('course_id',$courses[$temp]->id)
+                            ->get();
+                    if($CheckFinalClassSchedule->count() > 0){
+                        break;
+                    }
+
+                FinalClassSchedule::where('class_id',$sections->id)
+                ->where('class_name',$sections->class_name)
+                ->where('day',$DayName[$key])
+                                        ->where('session','2:30 - 3:20')
+                                        ->update([
+                                                'course_id' => $courses[$temp]->id,
+                                                'course_title' => $courses[$temp]->course_title,
+                                                'course_code' =>$courses[$temp]->course_code,
+                                                'course_credit_hour' => $courses[$temp]->course_credit_hour,
+
+
+                    ]);
+                FinalClassSchedule::where('class_id',$sections->id)
+                ->where('class_name',$sections->class_name)
+                ->where('day',$DayName[$key])
+                                        ->where('session','3:30 - 4:20')
+                                        ->update([
+                                                'course_id' => $courses[$temp]->id,
+                                                'course_title' => $courses[$temp]->course_title,
+                                                'course_code' =>$courses[$temp]->course_code,
+                                                'course_credit_hour' => $courses[$temp]->course_credit_hour,
+
+
+                    ]);
+
+                        }
+
+                    }
+
+
+                }
+
+
+
+
+
+
+
+
+
+            }//end of foreach
+
 
 
 
