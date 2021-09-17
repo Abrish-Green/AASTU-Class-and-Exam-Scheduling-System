@@ -176,11 +176,13 @@ Route::prefix('department')->group(function () {
 
 
 
+
     Route::post('/course/edit/{id}',[\App\Http\Controllers\API\Privates\course\courseController::class,'update']);
     Route::post('/course/{id}/delete',[\App\Http\Controllers\API\Privates\course\courseController::class,'destroy']);
 
 
-
+    Route::post('/add/class/block/room',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'create_class_block_room']);
+    Route::post('/get/selected/block/room',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'AddedClassRooms']);
 
 
 

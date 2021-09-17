@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\privates\placement;
 
 use App\Http\Controllers\Controller;
 use App\Models\Block;
+use App\Models\ClassBlockRoom;
 use App\Models\Classes;
 use App\Models\CollegeBlock;
 use App\Models\CollegeBlockRooms;
@@ -80,6 +81,56 @@ class PlacementController extends Controller
         }
 
     }
+
+
+    public function create_class_block_room(Request $request){
+
+
+        try{
+
+        $ClassBlockRoom = ClassBlockRoom::create([
+                            'room' => $request->room,
+                            'block'=>$request->block,
+                            'year' =>$request->year,
+                            'department_id' =>$request->department_id
+        ]);
+
+        return response([
+            'block_room' => $ClassBlockRoom
+        ],200);
+
+    }catch(Exception $e){
+        return response([
+            'error' => $e
+        ]);
+    }
+}
+
+
+
+
+    public function AddedClassRooms(Request $request){
+        //
+        $ExamRoom = ClassBlockRoom::where('department_id',$request->department_id)
+                                  ->get();
+
+        if(!$ExamRoom){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        return response([
+            'room' =>$ExamRoom,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
+    }
+
+
+
+
 
     public function useRooms(Request $request){ //department
         try{

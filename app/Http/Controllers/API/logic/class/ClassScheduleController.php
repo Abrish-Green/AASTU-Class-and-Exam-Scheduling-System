@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\logic\class;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassBlockRoom;
 use App\Models\Classes;
 use App\Models\Course;
 use App\Models\Department;
@@ -24,6 +25,54 @@ class ClassScheduleController extends Controller
     //Step-1 : create 5 day for every section
 
 
+
+
+
+
+
+    public function AssignRoom(){
+
+        $EverySection = Classes::all();
+        $EveryExamCourse = Course::all();
+        $EveryFinalExam = FinalExam::all();
+
+
+
+        foreach ($EverySection as $section) {
+
+            $yearRoom = ClassBlockRoom::where('year',$section->year)->where('department_id',$section->department_id)->get();
+            echo "Year $section->year $section->class_name<br />";
+            if($yearRoom->count() > 0){
+                foreach ($yearRoom as $roomRow) {
+                        echo "ROW - $roomRow <br />";
+
+                        echo "Assign Block-$roomRow->block ,Room - $roomRow->room<br />";
+
+
+                        $check = FinalClassSchedule::where('block',$roomRow->block)
+                                   ->where('room',$roomRow->room)->get();
+
+                            if($check->count() > 0){
+
+                            }else{
+                                FinalClassSchedule::where('class_id',$section->id)->update([
+                                    'block' => $roomRow->block,
+                                    'room' => $roomRow->room
+                                ]);
+                            }
+
+
+
+
+                }
+                echo "<br />";
+
+            }
+        }
+
+
+
+    }
 
 
 
@@ -310,6 +359,45 @@ class ClassScheduleController extends Controller
 
 
 
+
+
+            $EverySection = Classes::all();
+        $EveryExamCourse = Course::all();
+        $EveryFinalExam = FinalExam::all();
+
+
+
+        foreach ($EverySection as $section) {
+
+            $yearRoom = ClassBlockRoom::where('year',$section->year)->where('department_id',$section->department_id)->get();
+            echo "Year $section->year $section->class_name<br />";
+            if($yearRoom->count() > 0){
+                foreach ($yearRoom as $roomRow) {
+                        echo "ROW - $roomRow <br />";
+
+                        echo "Assign Block-$roomRow->block ,Room - $roomRow->room<br />";
+
+
+                        $check = FinalClassSchedule::where('block',$roomRow->block)
+                                   ->where('room',$roomRow->room)->get();
+
+                            if($check->count() > 0){
+
+                            }else{
+                                FinalClassSchedule::where('class_id',$section->id)->update([
+                                    'block' => $roomRow->block,
+                                    'room' => $roomRow->room
+                                ]);
+                            }
+
+
+
+
+                }
+                echo "<br />";
+
+            }
+        }
 
 
 
