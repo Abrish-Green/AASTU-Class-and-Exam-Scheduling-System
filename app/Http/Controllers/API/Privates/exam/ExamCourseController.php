@@ -56,6 +56,36 @@ class ExamCourseController extends Controller
     }
 
 
+    public function getFinalClassSchedule(Request $request){
+        $Validated = $request->validate([
+            'college_id' => 'required',
+            'department_id'=> 'required',
+            'semester'=> 'required',
+            'year'=> 'required',
+            'section'=> 'required',
+        ]);
+
+        $FinalExamSchedule = FinalExamSchedule::where('college_id', $Validated['college_id'])
+                                       ->where('department_id',$Validated['department_id'])
+                                       ->where('semester',$Validated['semester'])
+                                       ->where('year',$Validated['year'])
+                                       ->where('class_name',$Validated['section'])
+                                       ->get();
+
+
+        if($FinalExamSchedule->count()> 0){
+            return response([
+                'Message' => 'Exam Schedule Found',
+                'class_schedule' => $FinalExamSchedule
+            ],200);
+        }else{
+            return response([
+                'Message' => 'Exam Schedule Not Found'
+            ],200);
+        }
+
+
+    }
 
 
 

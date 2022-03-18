@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Privates\instructor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Instructor;
+use App\Models\InstructorCourseAssign;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +84,69 @@ class InstructorUserController extends Controller
         return response($response,200);
 
     }
+
+
+
+    public function create_instructor_course(Request $request){
+
+        try{
+            $Instructor_course = InstructorCourseAssign::create([
+                'instructor_id' => $request->instructor_id,
+                'instructor_name'=> $request->instructor_name,
+                'course_id'=> $request->course_id,
+                'year'=> $request->year,
+                'semester'=> $request->semester,
+                'department_id'=> $request->department_id
+            ]);
+
+            return response([
+                'instructor_course' => $Instructor_course,
+                'Message' => 'Found'
+            ]);
+
+        }catch(Exception $e){
+            return response([
+                'error'=> $e,
+                'Message' => 'Fail'
+            ]);
+        }
+
+    }
+
+
+    public function AddedClassInstructor(Request $request){
+        //
+        $ExamRoom = InstructorCourseAssign::where('department_id',$request->department_id)
+                                  ->get();
+
+        if(!$ExamRoom){
+            return response([
+                'Message' => 'Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        return response([
+            'room' =>$ExamRoom,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.

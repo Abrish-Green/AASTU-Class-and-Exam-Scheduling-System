@@ -56,6 +56,34 @@ class CourseController extends Controller
     }
 
 
+    public function getYearMyCourses(Request $request)
+    {
+        //
+        $course = Course::where('department_id', $request->department_id)
+                        ->where('year',$request->year)
+                        ->get();
+
+        try{
+        if(Department::findOrFail($request->department_id)->count() == 0){
+            return response([
+                'Message' => 'Department Not Found',
+                'Status' => 'OK'
+            ],200);
+        }
+        return response([
+            'courses' =>$course,
+            'Message' => 'Successful',
+            'Status' => 'OK'
+        ],200);
+        }catch(Exception $e){
+            return response([
+                'ERROR'=> $e,
+                'Message' => 'Successful',
+                'Status' => 'Fail'
+            ],200);
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.

@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Route;
 
 //EXAM FREE PORT
 Route::post('/users/get/exam/schedule',[\App\Http\Controllers\API\privates\exam\ExamCourseController::class,'getFinalExamSchedule']);
+Route::post('/users/get/class/schedule',[\App\Http\Controllers\API\privates\exam\ExamCourseController::class,'getFinalClassSchedule']);
+
 Route::get('/users/get/colleges',[\App\Http\Controllers\API\privates\college\CollegeAccountController::class,'index']);
 Route::post('/users/get/departments',[\App\Http\Controllers\API\privates\department\DepartmentAccountController::class,'getDepartmentForPublic']);
 Route::post('/users/get/sections',[\App\Http\Controllers\API\privates\section\SectionController::class,'getMySectionForPublic']);
@@ -163,7 +165,11 @@ Route::prefix('department')->group(function () {
 
 
     Route::post('/courses',[\App\Http\Controllers\API\Privates\course\courseController::class,'getMyCourses']);
+    Route::post('/courses/year',[\App\Http\Controllers\API\Privates\course\courseController::class,'getYearMyCourses']);
+
     Route::post('/course/create',[\App\Http\Controllers\API\Privates\course\courseController::class,'store']);
+
+
     Route::post('/course/owner',[\App\Http\Controllers\API\Privates\course\courseController::class,'giveCourseOwnership']);
 
     Route::post('/create/exam/course/',[\App\Http\Controllers\API\Privates\exam\ExamCourseController::class,'store']);
@@ -174,6 +180,8 @@ Route::prefix('department')->group(function () {
     Route::post('/get/exam/room/',[\App\Http\Controllers\API\Privates\exam\ExamRoomController::class,'getMyExamRooms']);
 
 
+    Route::get('/exam/generate',[\App\Http\Controllers\API\logic\exam\ExamScheduleController::class,'MakeFinalExamSchedule']);
+
 
 
 
@@ -183,6 +191,15 @@ Route::prefix('department')->group(function () {
 
     Route::post('/add/class/block/room',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'create_class_block_room']);
     Route::post('/get/selected/block/room',[\App\Http\Controllers\API\Privates\placement\PlacementController::class,'AddedClassRooms']);
+
+
+    Route::post('/assign/class/instructor',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'create_instructor_course']);
+    Route::post('/get/assigned/class/instructor',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'AddedClassInstructor']);
+
+
+    Route::post('/get/department/instructor/{id}',[\App\Http\Controllers\API\Privates\instructor\InstructorUserController::class,'getMyInstructors']);
+
+
 
 
 
